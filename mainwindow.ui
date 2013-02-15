@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>587</width>
+    <height>295</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>VTI Test Manager</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="vtitestmanager.qrc">
+    <normaloff>:/icons/vtitestmanager.ico</normaloff>:/icons/vtitestmanager.ico</iconset>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>100</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="vtitestmanager.qrc">:/images/logo.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>99</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>587</width>
+     <height>18</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu_File">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="action_ExitApplication"/>
+   </widget>
+   <widget class="QMenu" name="menu_Testinfra">
+    <property name="title">
+     <string>&amp;Testinfra</string>
+    </property>
+    <addaction name="action_Manage_registry"/>
+    <addaction name="separator"/>
+    <addaction name="action_AIF_TestConfiguration"/>
+    <addaction name="action_Cycler_TestConfiguration"/>
+   </widget>
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="action_Preferences"/>
+   </widget>
+   <widget class="QMenu" name="menu_Releases">
+    <property name="title">
+     <string>Releases</string>
+    </property>
+    <addaction name="action_BuildVTIPackage"/>
+    <addaction name="action_Process_Commands"/>
+    <addaction name="separator"/>
+    <addaction name="action_ManageReleases"/>
+   </widget>
+   <widget class="QMenu" name="menuAutomated_Tests">
+    <property name="title">
+     <string>Automated Tests</string>
+    </property>
+    <addaction name="action_ManageATP_AIF"/>
+    <addaction name="action_ManageATP_Cycler"/>
+   </widget>
+   <addaction name="menu_File"/>
+   <addaction name="menu_View"/>
+   <addaction name="menu_Testinfra"/>
+   <addaction name="menu_Releases"/>
+   <addaction name="menuAutomated_Tests"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="toolTip">
+    <string/>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_ExitApplication"/>
+   <addaction name="separator"/>
+   <addaction name="action_BuildVTIPackage"/>
+   <addaction name="separator"/>
+   <addaction name="action_ManageReleases"/>
+   <addaction name="action_Manage_registry"/>
+   <addaction name="separator"/>
+   <addaction name="action_AIF_TestConfiguration"/>
+   <addaction name="action_ManageATP_AIF"/>
+   <addaction name="separator"/>
+   <addaction name="action_Cycler_TestConfiguration"/>
+   <addaction name="action_ManageATP_Cycler"/>
+   <addaction name="separator"/>
+   <addaction name="action_Process_Commands"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="action_ExitApplication">
+   <property name="icon">
+    <iconset resource="vtitestmanager.qrc">
+     <normaloff>:/images/exit.png</normaloff>:/images/exit.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Exit</string>
+   </property>
+   <property name="toolTip">
+    <string>Exit application</string>
+   </property>
+  </action>
+  <action name="action_Manage_registry">
+   <property name="icon">
+    <iconset resource="vtitestmanager.qrc">
+     <normaloff>:/images/regedit.png</normaloff>:/images/regedit.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Manage registry ...</string>
+   </property>
+   <property name="toolTip">
+    <string>Manage AIF/Cycler registry settings</string>
+   </property>
+  </action>
+  <action name="action_AIF_TestConfiguration">
+   <property name="icon">
+    <iconset resource="vtitestmanager.qrc">
+     <normaloff>:/images/config_aif.png</normaloff>:/images/config_aif.png</iconset>
+   </property>
+   <property name="text">
+    <string>AIF test configuration</string>
+   </property>
+   <property name="toolTip">
+    <string>Configure the AIF automated test</string>
+   </property>
+  </action>
+  <action name="action_Cycler_TestConfiguration">
+   <property name="icon">
+    <iconset resource="vtitestmanager.qrc">
+     <normaloff>:/images/config_cycler.png</normaloff>:/images/config_cycler.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cycler test configuration</string>
+   </property>
+   <property name="toolTip">
+    <string>Configure the Cycler automated test</string>
+   </property>
+  </action>
+  <action name="action_Preferences">
+   <property name="icon">
+    <iconset resource="vtitestmanager.qrc">
+     <normaloff>:/images/preferences.png</normaloff>:/images/preferences.png</iconset>
+   </property>
+   <property name="text">
+    <string>Preferences ...</string>
+   </property>
+  </action>
+  <action name="action_ManageReleases">
+   <property name="icon">
+    <iconset resource="vtitestmanager.qrc">
+     <normaloff>:/images/releases.png</normaloff>:/images/releases.png</iconset>
+   </property>
+   <property name="text">
+    <string>Manage Releases</string>
+   </property>
+   <property name="toolTip">
+    <string>Manage AIF, Cycler and CSS releases</string>
+   </property>
+  </action>
+  <action name="action_BuildVTIPackage">
+   <property name="icon">
+    <iconset resource="vtitestmanager.qrc">
+     <normaloff>:/images/process.png</normaloff>:/images/process.png</iconset>
+   </property>
+   <property name="text">
+    <string>Build VTI Package</string>
+   </property>
+  </action>
+  <action name="action_ManageATP_AIF">
+   <property name="icon">
+    <iconset resource="vtitestmanager.qrc">
+     <normaloff>:/images/atp.png</normaloff>:/images/atp.png</iconset>
+   </property>
+   <property name="text">
+    <string>Manage AIF ATP</string>
+   </property>
+   <property name="toolTip">
+    <string>Manage and start Automated Test of AIF</string>
+   </property>
+  </action>
+  <action name="action_ManageATP_Cycler">
+   <property name="icon">
+    <iconset resource="vtitestmanager.qrc">
+     <normaloff>:/images/atp.png</normaloff>:/images/atp.png</iconset>
+   </property>
+   <property name="text">
+    <string>Manage Cycler ATP</string>
+   </property>
+   <property name="toolTip">
+    <string>Manage and start Automated Test of Cycler</string>
+   </property>
+  </action>
+  <action name="action_Process_Commands">
+   <property name="icon">
+    <iconset resource="vtitestmanager.qrc">
+     <normaloff>:/images/command_prompt.png</normaloff>:/images/command_prompt.png</iconset>
+   </property>
+   <property name="text">
+    <string>Process commands</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="vtitestmanager.qrc"/>
+ </resources>
+ <connections/>
+</ui>

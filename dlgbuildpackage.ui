@@ -1,0 +1,921 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dlgBuildPackage</class>
+ <widget class="QDialog" name="dlgBuildPackage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>986</width>
+    <height>548</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Build packages</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="vtitestmanager.qrc">
+    <normaloff>:/images/process.png</normaloff>:/images/process.png</iconset>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_9">
+   <item>
+    <widget class="QTabWidget" name="tabBuild">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabAIF">
+      <attribute name="title">
+       <string> AIF </string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="lblAIFBuildDrive">
+           <property name="text">
+            <string>1. Set AIF build drive :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="cmbAIFBuildDrive"/>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="lblAIFVersion">
+           <property name="text">
+            <string>2. Set AIF Version number :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="ledAIFVersion">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkAIFEngRelease">
+           <property name="text">
+            <string>Engineering release</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="ledAIFENGNumber">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>30</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>30</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblAIFLabel">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkSaveAIFBuildSettings">
+           <property name="text">
+            <string>Save AIF build settings</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="lblAIFStartBuild">
+           <property name="text">
+            <string>3. Start AIF build process</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pbStartAIFBuild">
+           <property name="text">
+            <string>Start AIF Build</string>
+           </property>
+           <property name="icon">
+            <iconset resource="vtitestmanager.qrc">
+             <normaloff>:/images/start.png</normaloff>:/images/start.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbAIFBuildALL">
+           <property name="text">
+            <string>All</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbAIFBuildHW">
+           <property name="toolTip">
+            <string>Build only DLLs</string>
+           </property>
+           <property name="text">
+            <string>HW</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbAIFBuildAIF">
+           <property name="toolTip">
+            <string>Copy AIF tcl files to D:\</string>
+           </property>
+           <property name="text">
+            <string>AIF</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbAIFBuildCYC">
+           <property name="toolTip">
+            <string>Copy Cycler tcl files to D:\</string>
+           </property>
+           <property name="text">
+            <string>CYC</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbAIFBuildAW">
+           <property name="toolTip">
+            <string>Create AW package</string>
+           </property>
+           <property name="text">
+            <string>AW</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QRadioButton" name="rbAIFBuildMSI">
+           <property name="toolTip">
+            <string>Make MSI from files stored on D:\</string>
+           </property>
+           <property name="text">
+            <string>MSI</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkAIFSilent">
+           <property name="text">
+            <string>Build silent mode</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QPlainTextEdit" name="ptAIFStdOut"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QPushButton" name="pbAIFHalt">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Stop</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/stop.png</normaloff>:/images/stop.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pbAIFYes">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Yes</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/ok.png</normaloff>:/images/ok.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pbAIFNo">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>No</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pbCopyAIFRelease">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Copy to local dir.</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/releases.png</normaloff>:/images/releases.png</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabCycler">
+      <attribute name="title">
+       <string> Cycler </string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLabel" name="lblCyclerBuildDrive">
+           <property name="text">
+            <string>1. Set Cycler build drive :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="cmbCyclerBuildDrive"/>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="lblCyclerVersion">
+           <property name="text">
+            <string>2. Set Cycler Version number :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="ledCyclerVersion">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkCyclerEngRelease">
+           <property name="text">
+            <string>Engineering release</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="ledCyclerENGNumber">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>30</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>30</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_8">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblCyclerLabel">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <item>
+          <widget class="QLabel" name="lblCyclerStartBuild">
+           <property name="text">
+            <string>3. Start Cycler build process</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pbStartCyclerBuild">
+           <property name="text">
+            <string>Start Cycler Build</string>
+           </property>
+           <property name="icon">
+            <iconset resource="vtitestmanager.qrc">
+             <normaloff>:/images/start.png</normaloff>:/images/start.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkSaveCyclerBuildSettings">
+           <property name="text">
+            <string>Save Cycler build settings</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QPlainTextEdit" name="ptCyclerStdOut"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QPushButton" name="pbCyclerHalt">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Stop</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/stop.png</normaloff>:/images/stop.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pbCyclerYes">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Yes</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/ok.png</normaloff>:/images/ok.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pbCyclerNo">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>No</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pbCopyCyclerRelease">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Copy to local dir.</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/releases.png</normaloff>:/images/releases.png</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabCSS">
+      <attribute name="title">
+       <string>CSS</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_12">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_18">
+         <item>
+          <widget class="QLabel" name="lblCSSBuildDrive">
+           <property name="text">
+            <string>1. Set CSS build drive :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="cmbCSSBuildDrive"/>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_17">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_19">
+         <item>
+          <widget class="QLabel" name="lblCSSVersion">
+           <property name="text">
+            <string>2. Set CSS Version number :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="ledCSSVersion">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkCSSEngRelease">
+           <property name="text">
+            <string>Engineering release</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="ledCSSENGNumber">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>30</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>30</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_18">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="lblCSSLabel">
+           <property name="text">
+            <string>TextLabel</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_19">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_20">
+         <item>
+          <widget class="QLabel" name="lblCSSStartBuild">
+           <property name="text">
+            <string>3. Start CSS build process</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pbStartCSSBuild">
+           <property name="text">
+            <string>Start CSS Build</string>
+           </property>
+           <property name="icon">
+            <iconset resource="vtitestmanager.qrc">
+             <normaloff>:/images/start.png</normaloff>:/images/start.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkSaveCSSBuildSettings">
+           <property name="text">
+            <string>Save CSS build settings</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_20">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_21">
+         <item>
+          <widget class="QPlainTextEdit" name="ptCSSStdOut"/>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_11">
+           <item>
+            <widget class="QPushButton" name="pbCSSHalt">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Stop</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/stop.png</normaloff>:/images/stop.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_11">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Fixed</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>10</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pbCSSYes">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Yes</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/ok.png</normaloff>:/images/ok.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pbCSSNo">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>No</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="verticalSpacer_12">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pbCopyCSSRelease">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Copy to local dir.</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/releases.png</normaloff>:/images/releases.png</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <widget class="QPushButton" name="pbExit">
+       <property name="text">
+        <string>Exit</string>
+       </property>
+       <property name="icon">
+        <iconset resource="vtitestmanager.qrc">
+         <normaloff>:/images/close.png</normaloff>:/images/close.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="vtitestmanager.qrc"/>
+ </resources>
+ <connections/>
+</ui>

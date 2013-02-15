@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dlgConfigEditor</class>
+ <widget class="QDialog" name="dlgConfigEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>724</width>
+    <height>705</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_3">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QGroupBox" name="gbConfigFile">
+       <property name="title">
+        <string> Config file </string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="lblFileName">
+            <property name="text">
+             <string>Name :</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="ledFileName">
+            <property name="text">
+             <string>ATP.config</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbChangeFile">
+            <property name="toolTip">
+             <string>Select different existing file ...</string>
+            </property>
+            <property name="text">
+             <string>Select different file</string>
+            </property>
+            <property name="icon">
+             <iconset resource="vtitestmanager.qrc">
+              <normaloff>:/images/preferences.png</normaloff>:/images/preferences.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbResetFileName">
+            <property name="toolTip">
+             <string>Reset file name to 'ATP.config'</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="vtitestmanager.qrc">
+              <normaloff>:/images/refresh.png</normaloff>:/images/refresh.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbProcessConfig">
+            <property name="text">
+             <string>Process file</string>
+            </property>
+            <property name="icon">
+             <iconset resource="vtitestmanager.qrc">
+              <normaloff>:/images/process.png</normaloff>:/images/process.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbSave">
+            <property name="text">
+             <string>Save</string>
+            </property>
+            <property name="icon">
+             <iconset resource="vtitestmanager.qrc">
+              <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+            </property>
+            <property name="iconSize">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="gbTestSelection">
+       <property name="title">
+        <string> Test selection </string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QCheckBox" name="chkOnlyTP">
+          <property name="text">
+           <string>Create only Test Plan html file</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="chkSilent">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="text">
+           <string>Start test in silent mode (automatically continues in case of error)</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <layout class="QFormLayout" name="formLayout_2">
+            <item row="0" column="0">
+             <widget class="QLabel" name="lblReleaseVersion">
+              <property name="text">
+               <string>Release Version :</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QLineEdit" name="ledReleaseVersion"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="lblTestReportRevision">
+              <property name="text">
+               <string>Test Report revision :</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="ledTestReportRevision">
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="lblTesterName">
+              <property name="text">
+               <string>Tester name :</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="ledTesterName"/>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="lblEnvironmentName">
+              <property name="text">
+               <string>Test environment name :</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="ledEnvironmentName"/>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="lblITUAddress">
+              <property name="text">
+               <string>ITU IP Address
+(if not exists -&gt; 0)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="ledITUAddress"/>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QLabel" name="lblTestItems">
+            <property name="text">
+             <string>List of test items</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="lblTetstTypes">
+            <property name="text">
+             <string>List of test types</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QListWidget" name="listTestElements">
+            <property name="editTriggers">
+             <set>QAbstractItemView::EditKeyPressed</set>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::MultiSelection</enum>
+            </property>
+            <property name="selectionBehavior">
+             <enum>QAbstractItemView::SelectRows</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QListWidget" name="listTestTypes">
+            <property name="maximumSize">
+             <size>
+              <width>160</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="selectionMode">
+             <enum>QAbstractItemView::MultiSelection</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QPushButton" name="pbSelectAll">
+            <property name="text">
+             <string>Select all test item</string>
+            </property>
+            <property name="icon">
+             <iconset resource="vtitestmanager.qrc">
+              <normaloff>:/images/ok.png</normaloff>:/images/ok.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbDeselectAll">
+            <property name="text">
+             <string>Deselect all test item</string>
+            </property>
+            <property name="icon">
+             <iconset resource="vtitestmanager.qrc">
+              <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QPushButton" name="pbExit">
+       <property name="text">
+        <string>Exit</string>
+       </property>
+       <property name="icon">
+        <iconset resource="vtitestmanager.qrc">
+         <normaloff>:/images/close.png</normaloff>:/images/close.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="vtitestmanager.qrc"/>
+ </resources>
+ <connections/>
+</ui>

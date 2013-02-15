@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dlgManageAutoTests</class>
+ <widget class="QDialog" name="dlgManageAutoTests">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>579</width>
+    <height>226</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QGroupBox" name="gbTestComments">
+       <property name="title">
+        <string> Comments, notes ... </string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <widget class="QPlainTextEdit" name="ptComment"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="gbSettings">
+       <property name="title">
+        <string> Settings </string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_3">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QCheckBox" name="chkShowWarning">
+            <property name="text">
+             <string>Show warning message box ...</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rbShowWarningDefault">
+            <property name="text">
+             <string>somewhere</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rbShowWarningTop">
+            <property name="text">
+             <string>top</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rbShowWarningBottom">
+            <property name="text">
+             <string>bottom</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblShowWarning">
+            <property name="text">
+             <string>of the monitor</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QPushButton" name="pbExit">
+       <property name="text">
+        <string>Exit</string>
+       </property>
+       <property name="icon">
+        <iconset resource="vtitestmanager.qrc">
+         <normaloff>:/images/close.png</normaloff>:/images/close.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pbExecute">
+       <property name="text">
+        <string>Start test </string>
+       </property>
+       <property name="icon">
+        <iconset resource="vtitestmanager.qrc">
+         <normaloff>:/images/start.png</normaloff>:/images/start.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="vtitestmanager.qrc"/>
+ </resources>
+ <connections/>
+</ui>

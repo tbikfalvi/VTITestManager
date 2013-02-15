@@ -1,0 +1,716 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>dlgTestinfraRegistry</class>
+ <widget class="QDialog" name="dlgTestinfraRegistry">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>473</width>
+    <height>525</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QHBoxLayout" name="horizontalLayout_13">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QGroupBox" name="gbRegAIF">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="title">
+        <string> AIF registry settings </string>
+       </property>
+       <layout class="QFormLayout" name="formLayout_3">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="lblAIFVersion">
+          <property name="text">
+           <string>Version :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="ledAIFVersion">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>120</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="lblInnovaProgram">
+          <property name="text">
+           <string>Innova program :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QLineEdit" name="ledInnovaProgram">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>120</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="lblFluoroPlus">
+          <property name="text">
+           <string>FluoroPlus :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QLineEdit" name="ledFluoroPlus">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>120</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>120</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0" colspan="2">
+         <widget class="Line" name="line_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QLabel" name="lblEngPcIp">
+          <property name="text">
+           <string>ENG PC IP Address :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLineEdit" name="ledEngPcIp">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkEngPcIp">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="5" column="0">
+         <widget class="QLabel" name="lblDlPcIp">
+          <property name="text">
+           <string>DL PC IP Address :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLineEdit" name="ledDlPcIp">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkDlPcIp">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="6" column="0">
+         <widget class="QLabel" name="lblAwHostIp">
+          <property name="text">
+           <string>AW IP Address :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLineEdit" name="ledAwHostIp">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkAwHostIp">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="8" column="0">
+         <widget class="QLabel" name="lblKeypadPort">
+          <property name="text">
+           <string>Keypad Port :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QLineEdit" name="ledKeypadPort">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkKeypadPort">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="9" column="0">
+         <widget class="QLabel" name="lblPosIp">
+          <property name="text">
+           <string>Positioner IP Address :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLineEdit" name="ledPosIp">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkPosIp">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="10" column="0">
+         <widget class="QLabel" name="lblPosLogPort">
+          <property name="text">
+           <string>Positioner Log Port :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="10" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QLineEdit" name="ledPosLogPort">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkPosLogPort">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="11" column="0">
+         <widget class="QLabel" name="lblPosTableLogPort">
+          <property name="text">
+           <string>Positioner Table Log Port :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="11" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QLineEdit" name="ledPosTableLogPort">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkPosTableLogPort">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="13" column="0">
+         <widget class="QLabel" name="lblFootSwitchType">
+          <property name="text">
+           <string>Footswitch type :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="13" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QLineEdit" name="ledFootSwitchType"/>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkFootSwitchType">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="14" column="0">
+         <widget class="QLabel" name="lblITUVersion">
+          <property name="text">
+           <string>ITU Version :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="14" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QLineEdit" name="ledITUVersion"/>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkITUVersion">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="7" column="0" colspan="2">
+         <widget class="Line" name="line">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="12" column="0" colspan="2">
+         <widget class="Line" name="line_3">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="gbRegCycler">
+       <property name="title">
+        <string> Cycler registry settings </string>
+       </property>
+       <layout class="QFormLayout" name="formLayout_2">
+        <property name="fieldGrowthPolicy">
+         <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+        </property>
+        <item row="0" column="0">
+         <widget class="QLabel" name="lblTableType">
+          <property name="minimumSize">
+           <size>
+            <width>125</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Table type :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <item>
+           <widget class="QLineEdit" name="ledTableType"/>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkTableType">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="lblItuIp">
+          <property name="text">
+           <string>ITU IP Address :</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <item>
+           <widget class="QLineEdit" name="ledItuIp">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkItuIp">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_12">
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="chkSelectAll">
+         <property name="layoutDirection">
+          <enum>Qt::RightToLeft</enum>
+         </property>
+         <property name="text">
+          <string>Select All</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_12">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>10</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QPushButton" name="pbReadFromRegistry">
+         <property name="minimumSize">
+          <size>
+           <width>130</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Read from registry</string>
+         </property>
+         <property name="icon">
+          <iconset resource="vtitestmanager.qrc">
+           <normaloff>:/images/regedit.png</normaloff>:/images/regedit.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbSaveToIni">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Save selected settings</string>
+         </property>
+         <property name="icon">
+          <iconset resource="vtitestmanager.qrc">
+           <normaloff>:/images/save.png</normaloff>:/images/save.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="rbReadSavedSettings">
+         <property name="minimumSize">
+          <size>
+           <width>130</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Read from backup</string>
+         </property>
+         <property name="icon">
+          <iconset resource="vtitestmanager.qrc">
+           <normaloff>:/images/import.png</normaloff>:/images/import.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbWriteToRegistry">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Write to registry</string>
+         </property>
+         <property name="icon">
+          <iconset resource="vtitestmanager.qrc">
+           <normaloff>:/images/regedit.png</normaloff>:/images/regedit.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_4">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbCheckDifference">
+         <property name="minimumSize">
+          <size>
+           <width>130</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Check differences</string>
+         </property>
+         <property name="icon">
+          <iconset resource="vtitestmanager.qrc">
+           <normaloff>:/images/search.png</normaloff>:/images/search.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbClose">
+         <property name="minimumSize">
+          <size>
+           <width>130</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Close</string>
+         </property>
+         <property name="icon">
+          <iconset resource="vtitestmanager.qrc">
+           <normaloff>:/images/close.png</normaloff>:/images/close.png</iconset>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="vtitestmanager.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>pbClose</sender>
+   <signal>clicked()</signal>
+   <receiver>dlgTestinfraRegistry</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>389</x>
+     <y>165</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>235</x>
+     <y>249</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
