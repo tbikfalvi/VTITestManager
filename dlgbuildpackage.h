@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include <QProcess>
+#include <QModelIndex>
+#include <QTreeWidgetItem>
 
 namespace Ui {
     class dlgBuildPackage;
@@ -17,6 +19,7 @@ public:
     ~dlgBuildPackage();
 
 private slots:
+    void slot_PackageNameCreate();
     void slot_AIFStdoutUpdated();
     void slot_AIFProcessFinished();
     void slot_CyclerStdoutUpdated();
@@ -45,6 +48,29 @@ private slots:
     void on_pbCSSYes_clicked();
     void on_pbCSSNo_clicked();
     void on_pbCSSHalt_clicked();
+    void on_pbPublishAIFRelease_clicked();
+    void on_pbPublishCylerRelease_clicked();
+    void on_pbPublishCSSRelease_clicked();
+
+    void on_treeSATReleases_doubleClicked(const QModelIndex &index);
+
+    void on_pbSATNewProgram_clicked();
+
+    void on_pbSATNewRelease_clicked();
+
+    void on_pbSATModify_clicked();
+
+    void on_pbSATDelete_clicked();
+
+    void on_treeSATReleases_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
+    void on_pbSATSave_clicked();
+
+    void on_pbSATCancel_clicked();
+
+    void on_pbCopySettings_clicked();
+
+    void on_pbBuildSatPackage_clicked();
 
 private:
     Ui::dlgBuildPackage *ui;
@@ -56,7 +82,11 @@ private:
     bool                 m_bProcessCyclerHalted;
     QProcess            *m_qpBuildCSS;
     bool                 m_bProcessCSSHalted;
+    bool                 m_bModifySATRelease;
+    bool                 m_bBuildCanStart;
 
+    void                _fillSATTree();
+    void                _saveSATTree();
     void                _enableAIFBuildSettings( bool p_bEnabled );
     void                _enableCyclerBuildSettings( bool p_bEnabled );
     void                _enableCSSBuildSettings( bool p_bEnabled );

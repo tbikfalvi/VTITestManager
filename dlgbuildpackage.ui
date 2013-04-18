@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>986</width>
+    <width>1014</width>
     <height>548</height>
    </rect>
   </property>
@@ -23,6 +23,561 @@
      <property name="currentIndex">
       <number>0</number>
      </property>
+     <widget class="QWidget" name="tabMain">
+      <attribute name="title">
+       <string>SAT Release</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
+        <widget class="QGroupBox" name="gbReleasInfo">
+         <property name="title">
+          <string> Release information </string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_10">
+            <item>
+             <widget class="QLabel" name="lblDrive">
+              <property name="text">
+               <string>Drive letter :</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="cmbDrive"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblProgramName">
+              <property name="text">
+               <string>Program name :</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="cmbProgramName"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="lblVersionNumber">
+              <property name="text">
+               <string>Version number :</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="ledVersionNumber">
+              <property name="maximumSize">
+               <size>
+                <width>50</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QCheckBox" name="chkEngRelease">
+              <property name="text">
+               <string>Engineering release</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="ledEngVersion">
+              <property name="maximumSize">
+               <size>
+                <width>30</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_9">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbCopySettings">
+              <property name="text">
+               <string>Copy settings</string>
+              </property>
+              <property name="icon">
+               <iconset resource="vtitestmanager.qrc">
+                <normaloff>:/images/refresh.png</normaloff>:/images/refresh.png</iconset>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_11">
+            <item>
+             <layout class="QFormLayout" name="formLayout">
+              <item row="0" column="0">
+               <widget class="QLabel" name="lblAIF">
+                <property name="text">
+                 <string>AIF :</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="ledAIFName">
+                <property name="minimumSize">
+                 <size>
+                  <width>200</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="autoFillBackground">
+                 <bool>false</bool>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(195, 195, 195);</string>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="lblCycler">
+                <property name="text">
+                 <string>Cycler :</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="ledCyclerName">
+                <property name="minimumSize">
+                 <size>
+                  <width>200</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(195, 195, 195);</string>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="lblCss">
+                <property name="text">
+                 <string>CSS :</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="ledCSSName">
+                <property name="minimumSize">
+                 <size>
+                  <width>200</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(195, 195, 195);</string>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_10">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbReleaseBuild">
+         <property name="title">
+          <string> Build release </string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
+          <item>
+           <widget class="QCheckBox" name="chkBuildSilent">
+            <property name="text">
+             <string>Silent build</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkPublish">
+            <property name="text">
+             <string>Publish releases</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="chkSaveSettings">
+            <property name="text">
+             <string>Save settings</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbBuildSatPackage">
+            <property name="text">
+             <string>Build SAT Package</string>
+            </property>
+            <property name="icon">
+             <iconset resource="vtitestmanager.qrc">
+              <normaloff>:/images/releases.png</normaloff>:/images/releases.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_11">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>484</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="gbReleaseManagement">
+         <property name="title">
+          <string> Release management </string>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_14">
+          <item>
+           <widget class="QTreeWidget" name="treeSATReleases">
+            <property name="sortingEnabled">
+             <bool>true</bool>
+            </property>
+            <property name="columnCount">
+             <number>3</number>
+            </property>
+            <attribute name="headerVisible">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="headerCascadingSectionResizes">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="headerDefaultSectionSize">
+             <number>100</number>
+            </attribute>
+            <attribute name="headerMinimumSectionSize">
+             <number>50</number>
+            </attribute>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string notr="true">2</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string notr="true">3</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_13">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>5</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_7">
+            <item>
+             <spacer name="verticalSpacer_7">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>15</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbSATNewProgram">
+              <property name="text">
+               <string>New Program</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbSATNewRelease">
+              <property name="text">
+               <string>New Release</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbSATModify">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Modify</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="pbSATDelete">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Delete</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_8">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_15">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>5</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="Line" name="line">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_14">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>5</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <spacer name="verticalSpacer_10">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>15</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <layout class="QFormLayout" name="formLayout_2">
+              <item row="0" column="0">
+               <widget class="QLabel" name="lblSATProgram">
+                <property name="text">
+                 <string>Program :</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="ledSATProgram">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>200</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="lblSATVersion">
+                <property name="text">
+                 <string>Version :</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="ledSATVersion">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="lblSATEngVersion">
+                <property name="text">
+                 <string>Eng. version :</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="ledSATEngVersion">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>50</width>
+                  <height>16777215</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_13">
+              <item>
+               <spacer name="horizontalSpacer_12">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pbSATCancel">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Cancel</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="vtitestmanager.qrc">
+                  <normaloff>:/images/cancel.png</normaloff>:/images/cancel.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pbSATSave">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Save</string>
+                </property>
+                <property name="icon">
+                 <iconset resource="vtitestmanager.qrc">
+                  <normaloff>:/images/ok.png</normaloff>:/images/ok.png</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_9">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
      <widget class="QWidget" name="tabAIF">
       <attribute name="title">
        <string> AIF </string>
@@ -145,13 +700,6 @@
            </property>
           </spacer>
          </item>
-         <item>
-          <widget class="QCheckBox" name="chkSaveAIFBuildSettings">
-           <property name="text">
-            <string>Save AIF build settings</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
        <item>
@@ -164,13 +712,16 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pbStartAIFBuild">
+          <widget class="QCheckBox" name="chkSaveAIFBuildSettings">
            <property name="text">
-            <string>Start AIF Build</string>
+            <string>Save AIF build settings</string>
            </property>
-           <property name="icon">
-            <iconset resource="vtitestmanager.qrc">
-             <normaloff>:/images/start.png</normaloff>:/images/start.png</iconset>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkPublishAIFAuto">
+           <property name="text">
+            <string>Publish automatically</string>
            </property>
           </widget>
          </item>
@@ -253,6 +804,17 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pbStartAIFBuild">
+           <property name="text">
+            <string>Start AIF Build</string>
+           </property>
+           <property name="icon">
+            <iconset resource="vtitestmanager.qrc">
+             <normaloff>:/images/start.png</normaloff>:/images/start.png</iconset>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -341,6 +903,20 @@
              </property>
              <property name="text">
               <string>Copy to local dir.</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/releases.png</normaloff>:/images/releases.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pbPublishAIFRelease">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Publish release</string>
              </property>
              <property name="icon">
               <iconset resource="vtitestmanager.qrc">
@@ -488,20 +1064,16 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pbStartCyclerBuild">
+          <widget class="QCheckBox" name="chkSaveCyclerBuildSettings">
            <property name="text">
-            <string>Start Cycler Build</string>
-           </property>
-           <property name="icon">
-            <iconset resource="vtitestmanager.qrc">
-             <normaloff>:/images/start.png</normaloff>:/images/start.png</iconset>
+            <string>Save Cycler build settings</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="chkSaveCyclerBuildSettings">
+          <widget class="QCheckBox" name="chkPublishCyclerAuto">
            <property name="text">
-            <string>Save Cycler build settings</string>
+            <string>Publish automatically</string>
            </property>
           </widget>
          </item>
@@ -517,6 +1089,17 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pbStartCyclerBuild">
+           <property name="text">
+            <string>Start Cycler Build</string>
+           </property>
+           <property name="icon">
+            <iconset resource="vtitestmanager.qrc">
+             <normaloff>:/images/start.png</normaloff>:/images/start.png</iconset>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -605,6 +1188,20 @@
              </property>
              <property name="text">
               <string>Copy to local dir.</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/releases.png</normaloff>:/images/releases.png</iconset>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pbPublishCylerRelease">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Publish release</string>
              </property>
              <property name="icon">
               <iconset resource="vtitestmanager.qrc">
@@ -752,20 +1349,16 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pbStartCSSBuild">
+          <widget class="QCheckBox" name="chkSaveCSSBuildSettings">
            <property name="text">
-            <string>Start CSS Build</string>
-           </property>
-           <property name="icon">
-            <iconset resource="vtitestmanager.qrc">
-             <normaloff>:/images/start.png</normaloff>:/images/start.png</iconset>
+            <string>Save CSS build settings</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="chkSaveCSSBuildSettings">
+          <widget class="QCheckBox" name="chkPublishCSSAuto">
            <property name="text">
-            <string>Save CSS build settings</string>
+            <string>Publish automatically</string>
            </property>
           </widget>
          </item>
@@ -781,6 +1374,17 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="pbStartCSSBuild">
+           <property name="text">
+            <string>Start CSS Build</string>
+           </property>
+           <property name="icon">
+            <iconset resource="vtitestmanager.qrc">
+             <normaloff>:/images/start.png</normaloff>:/images/start.png</iconset>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -876,6 +1480,20 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QPushButton" name="pbPublishCSSRelease">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>Publish release</string>
+             </property>
+             <property name="icon">
+              <iconset resource="vtitestmanager.qrc">
+               <normaloff>:/images/releases.png</normaloff>:/images/releases.png</iconset>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
         </layout>
@@ -914,6 +1532,56 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>tabBuild</tabstop>
+  <tabstop>cmbAIFBuildDrive</tabstop>
+  <tabstop>ledAIFVersion</tabstop>
+  <tabstop>chkAIFEngRelease</tabstop>
+  <tabstop>ledAIFENGNumber</tabstop>
+  <tabstop>chkSaveAIFBuildSettings</tabstop>
+  <tabstop>chkPublishAIFAuto</tabstop>
+  <tabstop>rbAIFBuildALL</tabstop>
+  <tabstop>rbAIFBuildHW</tabstop>
+  <tabstop>rbAIFBuildAIF</tabstop>
+  <tabstop>rbAIFBuildCYC</tabstop>
+  <tabstop>rbAIFBuildAW</tabstop>
+  <tabstop>rbAIFBuildMSI</tabstop>
+  <tabstop>chkAIFSilent</tabstop>
+  <tabstop>pbStartAIFBuild</tabstop>
+  <tabstop>ptAIFStdOut</tabstop>
+  <tabstop>pbAIFHalt</tabstop>
+  <tabstop>pbAIFYes</tabstop>
+  <tabstop>pbAIFNo</tabstop>
+  <tabstop>pbCopyAIFRelease</tabstop>
+  <tabstop>pbPublishAIFRelease</tabstop>
+  <tabstop>cmbCyclerBuildDrive</tabstop>
+  <tabstop>ledCyclerVersion</tabstop>
+  <tabstop>chkCyclerEngRelease</tabstop>
+  <tabstop>ledCyclerENGNumber</tabstop>
+  <tabstop>chkSaveCyclerBuildSettings</tabstop>
+  <tabstop>chkPublishCyclerAuto</tabstop>
+  <tabstop>pbStartCyclerBuild</tabstop>
+  <tabstop>ptCyclerStdOut</tabstop>
+  <tabstop>pbCyclerHalt</tabstop>
+  <tabstop>pbCyclerYes</tabstop>
+  <tabstop>pbCyclerNo</tabstop>
+  <tabstop>pbCopyCyclerRelease</tabstop>
+  <tabstop>pbPublishCylerRelease</tabstop>
+  <tabstop>cmbCSSBuildDrive</tabstop>
+  <tabstop>ledCSSVersion</tabstop>
+  <tabstop>chkCSSEngRelease</tabstop>
+  <tabstop>ledCSSENGNumber</tabstop>
+  <tabstop>chkSaveCSSBuildSettings</tabstop>
+  <tabstop>chkPublishCSSAuto</tabstop>
+  <tabstop>pbStartCSSBuild</tabstop>
+  <tabstop>ptCSSStdOut</tabstop>
+  <tabstop>pbCSSHalt</tabstop>
+  <tabstop>pbCSSYes</tabstop>
+  <tabstop>pbCSSNo</tabstop>
+  <tabstop>pbCopyCSSRelease</tabstop>
+  <tabstop>pbPublishCSSRelease</tabstop>
+  <tabstop>pbExit</tabstop>
+ </tabstops>
  <resources>
   <include location="vtitestmanager.qrc"/>
  </resources>

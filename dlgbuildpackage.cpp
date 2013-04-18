@@ -11,6 +11,11 @@
 #include <QDir>
 #include <QByteArray>
 #include <QScrollBar>
+#include <QFileDialog>
+#include <QFileInfo>
+#include <QFile>
+#include <QTextStream>
+#include <QDomDocument>
 
 //============================================================================================================
 
@@ -36,7 +41,14 @@ dlgBuildPackage::dlgBuildPackage(QWidget *parent) : QDialog(parent), ui(new Ui::
     m_qpBuildCSS = NULL;
     m_bProcessCSSHalted = false;
 
+    m_bModifySATRelease = false;
+
     ui->setupUi(this);
+
+    ui->cmbDrive->addItem( tr("<not selected>") );
+    ui->cmbProgramName->addItem( tr("<not selected>") );
+
+    _fillSATTree();
 
     connect( ui->ledAIFVersion, SIGNAL(textChanged(QString)), this, SLOT(slot_AIFLabelUpdate()) );
     connect( ui->chkAIFEngRelease, SIGNAL(clicked()), this, SLOT(slot_AIFLabelUpdate()) );
@@ -47,6 +59,10 @@ dlgBuildPackage::dlgBuildPackage(QWidget *parent) : QDialog(parent), ui(new Ui::
     connect( ui->ledCSSVersion, SIGNAL(textChanged(QString)), this, SLOT(slot_CSSLabelUpdate()) );
     connect( ui->chkCSSEngRelease, SIGNAL(clicked()), this, SLOT(slot_CSSLabelUpdate()) );
     connect( ui->ledCSSENGNumber, SIGNAL(textChanged(QString)), this, SLOT(slot_CSSLabelUpdate()) );
+    connect( ui->cmbProgramName, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_PackageNameCreate()) );
+    connect( ui->ledVersionNumber, SIGNAL(textChanged(QString)), this, SLOT(slot_PackageNameCreate()) );
+    connect( ui->chkEngRelease, SIGNAL(toggled(bool)), this, SLOT(slot_PackageNameCreate()) );
+    connect( ui->ledEngVersion, SIGNAL(textChanged(QString)), this, SLOT(slot_PackageNameCreate()) );
 
     QFileInfoList roots = QDir::drives();
 
@@ -55,6 +71,7 @@ dlgBuildPackage::dlgBuildPackage(QWidget *parent) : QDialog(parent), ui(new Ui::
         ui->cmbAIFBuildDrive->addItem( roots.at(i).filePath().left(1) );
         ui->cmbCyclerBuildDrive->addItem( roots.at(i).filePath().left(1) );
         ui->cmbCSSBuildDrive->addItem( roots.at(i).filePath().left(1) );
+        ui->cmbDrive->addItem( roots.at(i).filePath().left(1) );
         if( ui->cmbAIFBuildDrive->itemText( ui->cmbAIFBuildDrive->count()-1 ).compare(tgPrefs::instance().buildAIFDrive()) == 0 )
         {
             ui->cmbAIFBuildDrive->setCurrentIndex( i );
@@ -130,9 +147,8 @@ void dlgBuildPackage::on_chkAIFEngRelease_clicked()
 //============================================================================================================
 void dlgBuildPackage::on_pbStartAIFBuild_clicked()
 {
-    QString qsCurrentPath = QDir::currentPath();
-
     ui->pbCopyAIFRelease->setEnabled( false );
+    ui->pbPublishAIFRelease->setEnabled( false );
     ui->ptAIFStdOut->clear();
 
     if( ui->chkSaveAIFBuildSettings )
@@ -186,7 +202,7 @@ void dlgBuildPackage::on_pbStartAIFBuild_clicked()
                                  "Please select a different drive.") );
     }
 
-    QDir::setCurrent( qsCurrentPath );
+    QDir::setCurrent( m_qsCurrentPath );
 }
 //============================================================================================================
 //
@@ -278,11 +294,78 @@ void dlgBuildPackage::on_pbCopyAIFRelease_clicked()
 //------------------------------------------------------------------------------------------------------------
 //
 //============================================================================================================
+void dlgBuildPackage::on_pbPublishAIFRelease_clicked()
+{
+    ui->pbPublishAIFRelease->setEnabled( false );
+
+    QString qsDestPath = tgPrefs::instance().dirRemoteReleases();
+    QString qsFileName = QString("Testinfra_AIF_%1").arg(ui->ledAIFVersion->text());
+
+    if( !ui->chkAIFEngRelease->isChecked() )
+    {
+        // Official release
+        qsDestPath.append( "SAT\\" );
+        qsDestPath.append( ui->ledAIFVersion->text() );
+    }
+    else
+    {
+        // ENG release
+        qsDestPath.append( "SAT_Engineering\\" );
+        qsDestPath.append( ui->ledAIFVersion->text() );
+        qsDestPath.append( (ui->chkAIFEngRelease->isChecked()?QString("_ENG%1").arg(ui->ledAIFENGNumber->text()):"") );
+        qsFileName.append( (ui->chkAIFEngRelease->isChecked()?QString("_ENG%1").arg(ui->ledAIFENGNumber->text()):"") );
+    }
+    qsFileName.append(".msi");
+
+    QString qsDir = QString("%1:\\testinfra\\build\\MSIPackage\\Release").arg(ui->cmbAIFBuildDrive->currentText());
+
+    _appendAIFStdOut( QString("\nCopy AIF release '%1'\n"
+                              "    from '%2'\n"
+                              "    to '%3'\n").arg(qsFileName).arg(qsDir).arg(qsDestPath) );
+
+    QDir    qdDest(qsDestPath);
+
+    if( !QDir::setCurrent(qsDestPath) )
+    {
+        if( qdDest.mkpath(qsDestPath) )
+        {
+            // ok
+            _appendAIFStdOut( QString("\n\nDestination directory created") );
+            QDir::setCurrent(qsDestPath);
+        }
+        else
+        {
+            _appendAIFStdOut( QString("\n\nCreating destination directory FAILED\n") );
+            return;
+        }
+    }
+
+    QFile   qfAIFRelease( QString("%1\\%2").arg(qsDir).arg(qsFileName) );
+    QFile   qfDestRelease( QString("%1\\%2").arg(qsDestPath).arg(qsFileName) );
+
+    if( qfDestRelease.exists() )
+    {
+        qfDestRelease.remove();
+    }
+
+    if( qfAIFRelease.copy( QString("%1\\%2").arg(qsDestPath).arg(qsFileName) ) )
+    {
+        _appendAIFStdOut("\nCopy SUCCEEDED\n");
+    }
+    else
+    {
+        _appendAIFStdOut("\nCopy FAILED\n");
+    }
+}
+//============================================================================================================
+//
+//------------------------------------------------------------------------------------------------------------
+//
+//============================================================================================================
 void dlgBuildPackage::on_pbStartCyclerBuild_clicked()
 {
-    QString qsCurrentPath = QDir::currentPath();
-
     ui->pbCopyCyclerRelease->setEnabled( false );
+    ui->pbPublishCylerRelease->setEnabled( false );
     ui->ptCyclerStdOut->clear();
 
     if( ui->chkSaveCyclerBuildSettings )
@@ -322,7 +405,7 @@ void dlgBuildPackage::on_pbStartCyclerBuild_clicked()
                                  "Please select a different drive.") );
     }
 
-    QDir::setCurrent( qsCurrentPath );
+    QDir::setCurrent( m_qsCurrentPath );
 }
 //============================================================================================================
 //
@@ -370,9 +453,8 @@ void dlgBuildPackage::on_chkCyclerEngRelease_clicked()
 //============================================================================================================
 void dlgBuildPackage::on_pbStartCSSBuild_clicked()
 {
-    QString qsCurrentPath = QDir::currentPath();
-
     ui->pbCopyCSSRelease->setEnabled( false );
+    ui->pbPublishCSSRelease->setEnabled( false );
     ui->ptCSSStdOut->clear();
 
     if( ui->chkSaveCSSBuildSettings )
@@ -414,7 +496,7 @@ void dlgBuildPackage::on_pbStartCSSBuild_clicked()
             return;
         }
 
-        QString     qsBuildCommand = QString("\"%1\\pkzip.exe\" -add %2.zip ").arg(qsCurrentPath).arg(qsVersion);
+        QString     qsBuildCommand = QString("\"%1\\pkzip.exe\" -add %2.zip ").arg(m_qsCurrentPath).arg(qsVersion);
 
         qsBuildCommand.append( "CellSanityActionLib.tcl " );
         qsBuildCommand.append( "CellStatusActionLib.tcl " );
@@ -437,7 +519,7 @@ void dlgBuildPackage::on_pbStartCSSBuild_clicked()
                                  "Please select a different drive.") );
     }
 
-    QDir::setCurrent( qsCurrentPath );
+    QDir::setCurrent( m_qsCurrentPath );
 }
 //============================================================================================================
 //
@@ -514,6 +596,12 @@ void dlgBuildPackage::slot_AIFProcessFinished()
     if( !m_bProcessAIFHalted && ui->ptAIFStdOut->toPlainText().contains( "Test Infra package build finished" ) )
     {
         ui->pbCopyAIFRelease->setEnabled( true );
+        ui->pbPublishAIFRelease->setEnabled( true );
+
+        if( ui->chkPublishAIFAuto->isChecked() )
+        {
+            on_pbPublishAIFRelease_clicked();
+        }
     }
 
     m_bProcessAIFHalted = false;
@@ -546,6 +634,12 @@ void dlgBuildPackage::slot_CyclerProcessFinished()
     if( !m_bProcessCyclerHalted && ui->ptCyclerStdOut->toPlainText().contains( "Zip file created:" ) )
     {
         ui->pbCopyCyclerRelease->setEnabled( true );
+        ui->pbPublishCylerRelease->setEnabled( true );
+
+        if( ui->chkPublishCyclerAuto->isChecked() )
+        {
+            on_pbPublishCylerRelease_clicked();
+        }
     }
 
     m_bProcessCyclerHalted = false;
@@ -576,6 +670,12 @@ void dlgBuildPackage::slot_CSSProcessFinished()
                                  "----------------------------------------------------------\n").arg(qsFinishMessage) );
 
     ui->pbCopyCSSRelease->setEnabled( true );
+    ui->pbPublishCSSRelease->setEnabled( true );
+
+    if( ui->chkPublishCSSAuto->isChecked() )
+    {
+        on_pbPublishCSSRelease_clicked();
+    }
 
     m_bProcessCSSHalted = false;
     _enableCSSBuildSettings( true );
@@ -602,6 +702,7 @@ void dlgBuildPackage::_enableAIFBuildSettings(bool p_bEnabled)
     ui->rbAIFBuildMSI->setEnabled( p_bEnabled );
     ui->chkAIFSilent->setEnabled( p_bEnabled );
     ui->chkSaveAIFBuildSettings->setEnabled( p_bEnabled );
+    ui->chkPublishAIFAuto->setEnabled( p_bEnabled );
 
     ui->pbAIFYes->setEnabled( !p_bEnabled );
     ui->pbAIFNo->setEnabled( !p_bEnabled );
@@ -623,6 +724,7 @@ void dlgBuildPackage::_enableCyclerBuildSettings(bool p_bEnabled)
     ui->ledCyclerENGNumber->setEnabled( p_bEnabled );
     ui->pbStartCyclerBuild->setEnabled( p_bEnabled );
     ui->chkSaveCyclerBuildSettings->setEnabled( p_bEnabled );
+    ui->chkPublishCyclerAuto->setEnabled( p_bEnabled );
 
     ui->pbCyclerYes->setEnabled( !p_bEnabled );
     ui->pbCyclerNo->setEnabled( !p_bEnabled );
@@ -643,6 +745,7 @@ void dlgBuildPackage::_enableCSSBuildSettings(bool p_bEnabled)
     ui->ledCSSENGNumber->setEnabled( p_bEnabled );
     ui->pbStartCSSBuild->setEnabled( p_bEnabled );
     ui->chkSaveCSSBuildSettings->setEnabled( p_bEnabled );
+    ui->chkPublishCSSAuto->setEnabled( p_bEnabled );
 
     ui->pbCSSYes->setEnabled( !p_bEnabled );
     ui->pbCSSNo->setEnabled( !p_bEnabled );
@@ -744,6 +847,81 @@ void dlgBuildPackage::on_pbCopyCyclerRelease_clicked()
 //------------------------------------------------------------------------------------------------------------
 //
 //============================================================================================================
+void dlgBuildPackage::on_pbPublishCylerRelease_clicked()
+{
+    ui->pbPublishCylerRelease->setEnabled( false );
+
+    int nPosStart = ui->ptCyclerStdOut->toPlainText().indexOf( QString("Zip file created: ") );
+    int nPosStop  = ui->ptCyclerStdOut->toPlainText().indexOf( QString("\n"), nPosStart );
+
+    QString qsDir = ui->ptCyclerStdOut->toPlainText().mid( nPosStart, nPosStop-nPosStart ).remove( QString("Zip file created: ") );
+
+    qsDir.replace( QString("/"), QString("\\") );
+
+    QString qsFileName  = qsDir.right( qsDir.length()-qsDir.lastIndexOf( QString("\\") ) );
+
+    qsDir.remove( qsFileName );
+    qsFileName.remove( "\\" );
+
+    QString qsDestPath = tgPrefs::instance().dirRemoteReleases();
+
+    if( !ui->chkCyclerEngRelease->isChecked() )
+    {
+        // Official release
+        qsDestPath.append( "SAT\\" );
+        qsDestPath.append( ui->ledCyclerVersion->text() );
+    }
+    else
+    {
+        // ENG release
+        qsDestPath.append( "SAT_Engineering\\" );
+        qsDestPath.append( ui->ledCyclerVersion->text() );
+        qsDestPath.append( (ui->chkCyclerEngRelease->isChecked()?QString("_ENG%1").arg(ui->ledCyclerENGNumber->text()):"") );
+    }
+
+    _appendCyclerStdOut( QString("\nCopy Cycler package '%1'\n"
+                                 "    from '%2'\n"
+                                 "    to '%3'\n").arg(qsFileName).arg(qsDir).arg(qsDestPath) );
+
+    QDir    qdDest(qsDestPath);
+
+    if( !QDir::setCurrent(qsDestPath) )
+    {
+        if( qdDest.mkpath(qsDestPath) )
+        {
+            // ok
+            _appendCyclerStdOut( QString("\n\nDestination directory created") );
+            QDir::setCurrent(qsDestPath);
+        }
+        else
+        {
+            _appendCyclerStdOut( QString("\n\nCreating destination directory FAILED\n") );
+            return;
+        }
+    }
+
+    QFile   qfCyclerRelease( QString("%1\\%2").arg(qsDir).arg(qsFileName) );
+    QFile   qfDestRelease( QString("%1\\%2").arg(qsDestPath).arg(qsFileName) );
+
+    if( qfDestRelease.exists() )
+    {
+        qfDestRelease.remove();
+    }
+
+    if( qfCyclerRelease.copy( QString("%1\\%2").arg(qsDestPath).arg(qsFileName) ) )
+    {
+        _appendCyclerStdOut("\nCopy SUCCEEDED\n");
+    }
+    else
+    {
+        _appendCyclerStdOut("\nCopy FAILED\n");
+    }
+}
+//============================================================================================================
+//
+//------------------------------------------------------------------------------------------------------------
+//
+//============================================================================================================
 void dlgBuildPackage::on_pbCopyCSSRelease_clicked()
 {
     ui->pbCopyCSSRelease->setEnabled( false );
@@ -796,6 +974,81 @@ void dlgBuildPackage::on_pbCopyCSSRelease_clicked()
     }
     _appendCSSStdOut( qsTemp );
 }
+//============================================================================================================
+//
+//------------------------------------------------------------------------------------------------------------
+//
+//============================================================================================================
+void dlgBuildPackage::on_pbPublishCSSRelease_clicked()
+{
+    ui->pbPublishCSSRelease->setEnabled( false );
+
+    QString qsDestPath = tgPrefs::instance().dirRemoteReleases();
+    QString qsENG = (ui->chkCSSEngRelease->isChecked()?QString("_ENG%1").arg(ui->ledCSSENGNumber->text()):"");
+    QString qsFileName = QString( "CSS_%1" ).arg( ui->ledCSSVersion->text() );
+
+    if( !ui->chkCSSEngRelease->isChecked() )
+    {
+        // Official release
+        qsDestPath.append( "SAT\\" );
+        qsDestPath.append( ui->ledCSSVersion->text() );
+    }
+    else
+    {
+        // ENG release
+        qsDestPath.append( "SAT_Engineering\\" );
+        qsDestPath.append( ui->ledCSSVersion->text() );
+        qsDestPath.append( qsENG );
+        qsFileName.append( qsENG );
+    }
+
+    qsFileName.append( ".zip" );
+
+    QString qsDir = QString("%1:/sat/CellStatusScenario").arg(ui->cmbCSSBuildDrive->currentText());
+
+    qsDir.replace( QString("/"), QString("\\") );
+    _appendCSSStdOut( QString("\nPublish CSS package '%1'\n"
+                                 "    from '%2'\n"
+                                 "    to '%3'\n").arg(qsFileName).arg(qsDir).arg(qsDestPath) );
+
+    QDir    qdDest(qsDestPath);
+
+    if( !QDir::setCurrent(qsDestPath) )
+    {
+        if( qdDest.mkpath(qsDestPath) )
+        {
+            // ok
+            _appendCSSStdOut( QString("\n\nDestination directory created") );
+            QDir::setCurrent(qsDestPath);
+        }
+        else
+        {
+            _appendCSSStdOut( QString("\n\nCreating destination directory FAILED\n") );
+            return;
+        }
+    }
+
+    QFile   qfCSSRelease( QString("%1\\%2").arg(qsDir).arg(qsFileName) );
+    QFile   qfDestRelease( QString("%1\\%2").arg(qsDestPath).arg(qsFileName) );
+
+    if( qfDestRelease.exists() )
+    {
+        qfDestRelease.remove();
+    }
+
+    if( qfCSSRelease.copy( QString("%1\\%2").arg(qsDestPath).arg(qsFileName) ) )
+    {
+        _appendCSSStdOut("\nCopy SUCCEEDED\n");
+    }
+    else
+    {
+        _appendCSSStdOut("\nCopy FAILED\n");
+    }
+}
+//============================================================================================================
+//
+//------------------------------------------------------------------------------------------------------------
+//
 //============================================================================================================
 void dlgBuildPackage::_appendAIFStdOut(const QString &p_qsText)
 {
@@ -864,4 +1117,437 @@ void dlgBuildPackage::slot_CSSLabelUpdate()
         qsLabel += QString( "_ENG%1" ).arg( ui->ledCSSENGNumber->text() );
 
     ui->lblCSSLabel->setText( qsLabel );
+}
+
+void dlgBuildPackage::_fillSATTree()
+{
+    QDomDocument doc( "SATReleases" );
+    QFile file( "satreleases.xml" );
+
+    if( !file.open(QIODevice::ReadOnly) )
+        return;
+
+    QString      qsErrorMsg  = "";
+    int          inErrorLine = 0;
+
+    file.seek( 0 );
+    if( !doc.setContent( &file, &qsErrorMsg, &inErrorLine ) )
+    {
+        QMessageBox::warning( this, tr("Warning"), QString( "Parsing file: satreleases.xml - Error in line %2: %3" ).arg( inErrorLine ).arg( qsErrorMsg ) );
+        file.close();
+        return;
+    }
+    file.close();
+
+    QDomElement     docRoot     = doc.documentElement();
+    QDomNodeList    obPrograms  = docRoot.elementsByTagName("releases").at(0).toElement().elementsByTagName("program");
+    QStringList     qslItem;
+
+    ui->treeSATReleases->setColumnCount( 3 );
+    qslItem = QStringList() << "Name" << "Release version" << "Eng version";
+    ui->treeSATReleases->setHeaderLabels( qslItem );
+    ui->treeSATReleases->setHeaderHidden( false );
+
+    for( int i = 0; i < obPrograms.count(); i++ )
+    {
+        QStringList      qslItem;
+        QTreeWidgetItem *itemPrg;
+        QTreeWidgetItem *itemRelease;
+
+        QString qsName = obPrograms.at(i).toElement().attribute( "name", "" );
+
+        ui->cmbProgramName->addItem( qsName );
+
+        itemPrg = new QTreeWidgetItem( ui->treeSATReleases );
+        itemPrg->setData( 0, Qt::DisplayRole, qsName );
+
+        QDomNodeList obTestProcedures = obPrograms.at(i).toElement().elementsByTagName("release");
+
+        for( int j=0; j < obTestProcedures.count(); j++ )
+        {
+            QString qsVersion    = obTestProcedures.at(j).toElement().attribute("version", "");
+            QString qsEngVersion = obTestProcedures.at(j).toElement().attribute("eng_version", "");
+
+            qslItem = QStringList() << "" << qsVersion << qsEngVersion;
+            itemRelease = new QTreeWidgetItem( itemPrg, qslItem );
+        }
+    }
+}
+
+void dlgBuildPackage::on_treeSATReleases_doubleClicked(const QModelIndex &)
+{
+    QTreeWidgetItem *itemRelease;
+
+    itemRelease = ui->treeSATReleases->currentItem();
+
+    if( itemRelease->text(0).length() > 0 )
+        return;
+
+    QString qsProgram = itemRelease->parent()->text( 0 );
+    QString qsVersionRelease = itemRelease->text( 1 );
+    QString qsVersionEng = itemRelease->text( 2 );
+
+    for( int i=0; i<ui->cmbProgramName->count(); i++ )
+    {
+        if( ui->cmbProgramName->itemText(i).contains(qsProgram) )
+        {
+            ui->cmbProgramName->setCurrentIndex( i );
+            break;
+        }
+    }
+
+    ui->ledVersionNumber->setText( qsVersionRelease );
+    if( qsVersionEng.length() > 0 )
+    {
+        ui->chkEngRelease->setChecked( true );
+        ui->ledEngVersion->setText( qsVersionEng );
+    }
+    else
+    {
+        ui->chkEngRelease->setChecked( false );
+        ui->ledEngVersion->setText( qsVersionEng );
+    }
+}
+
+void dlgBuildPackage::slot_PackageNameCreate()
+{
+    if( ui->cmbProgramName->currentIndex() > 0 )
+    {
+        QString qsName = "";
+
+        qsName.append( ui->cmbProgramName->currentText() );
+        qsName.append( "_" );
+        qsName.append( ui->ledVersionNumber->text() );
+        if( ui->chkEngRelease->isChecked() && ui->ledEngVersion->text().length() > 0 )
+        {
+            qsName.append( "_ENG" );
+            qsName.append( ui->ledEngVersion->text() );
+        }
+
+        ui->ledAIFName->setText( QString("AIF_%1").arg(qsName) );
+        ui->ledCyclerName->setText( QString("LBY_%1").arg(qsName) );
+        ui->ledCSSName->setText( QString("CSS_%1").arg(qsName) );
+    }
+}
+
+void dlgBuildPackage::on_pbSATNewProgram_clicked()
+{
+    ui->treeSATReleases->setEnabled( false );
+
+    ui->pbSATNewProgram->setEnabled( false );
+    ui->pbSATNewRelease->setEnabled( false );
+    ui->pbSATModify->setEnabled( false );
+    ui->pbSATDelete->setEnabled( false );
+
+    ui->ledSATProgram->setEnabled( true );
+    ui->ledSATVersion->setEnabled( false );
+    ui->ledSATEngVersion->setEnabled( false );
+
+    ui->pbSATSave->setEnabled( true );
+    ui->pbSATCancel->setEnabled( true );
+
+    ui->ledSATProgram->setFocus();
+}
+
+void dlgBuildPackage::on_pbSATNewRelease_clicked()
+{
+    ui->treeSATReleases->setEnabled( false );
+
+    ui->pbSATNewProgram->setEnabled( false );
+    ui->pbSATNewRelease->setEnabled( false );
+    ui->pbSATModify->setEnabled( false );
+    ui->pbSATDelete->setEnabled( false );
+
+    ui->ledSATProgram->setEnabled( false );
+    ui->ledSATVersion->setEnabled( true );
+    ui->ledSATEngVersion->setEnabled( true );
+
+    ui->pbSATSave->setEnabled( true );
+    ui->pbSATCancel->setEnabled( true );
+
+    QTreeWidgetItem *itemRelease = ui->treeSATReleases->currentItem();
+    QString          qsProgram;
+
+    if( itemRelease->text( 0 ).length() > 0 )
+        qsProgram = itemRelease->text( 0 );
+    else
+        qsProgram = itemRelease->parent()->text( 0 );
+
+    ui->ledSATProgram->setText( qsProgram );
+
+    ui->ledSATProgram->setFocus();
+}
+
+void dlgBuildPackage::on_pbSATModify_clicked()
+{
+    m_bModifySATRelease = true;
+
+    QTreeWidgetItem *itemRelease = ui->treeSATReleases->currentItem();
+
+    ui->ledSATProgram->setText( itemRelease->text( 0 ) );
+    ui->ledSATVersion->setText( itemRelease->text( 1 ) );
+    ui->ledSATEngVersion->setText( itemRelease->text( 2 ) );
+
+    ui->treeSATReleases->setEnabled( false );
+
+    ui->pbSATNewProgram->setEnabled( false );
+    ui->pbSATNewRelease->setEnabled( false );
+    ui->pbSATModify->setEnabled( false );
+    ui->pbSATDelete->setEnabled( false );
+
+    if( itemRelease->text(0).length() == 0 )
+    {
+        ui->ledSATProgram->setEnabled( false );
+        ui->ledSATVersion->setEnabled( true );
+        ui->ledSATEngVersion->setEnabled( true );
+    }
+    else
+    {
+        ui->ledSATProgram->setEnabled( true );
+        ui->ledSATVersion->setEnabled( false );
+        ui->ledSATEngVersion->setEnabled( false );
+    }
+
+    ui->pbSATSave->setEnabled( true );
+    ui->pbSATCancel->setEnabled( true );
+
+    ui->ledSATProgram->setFocus();
+}
+
+void dlgBuildPackage::on_pbSATDelete_clicked()
+{
+    QTreeWidgetItem *item = ui->treeSATReleases->currentItem();
+    ui->treeSATReleases->takeTopLevelItem( ui->treeSATReleases->indexOfTopLevelItem(item) );
+    delete item;
+
+    _saveSATTree();
+
+    ui->treeSATReleases->setFocus();
+}
+
+void dlgBuildPackage::on_treeSATReleases_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *)
+{
+    if( current != NULL )
+    {
+        ui->pbSATModify->setEnabled( true );
+        ui->pbSATDelete->setEnabled( true );
+    }
+    else
+    {
+        ui->pbSATModify->setEnabled( false );
+        ui->pbSATDelete->setEnabled( false );
+    }
+}
+
+void dlgBuildPackage::on_pbSATSave_clicked()
+{
+    if( m_bModifySATRelease )
+    {
+        // Update current item
+        QTreeWidgetItem *item = ui->treeSATReleases->currentItem();
+
+        if( ui->ledSATVersion->isEnabled() )
+        {
+            // Update release
+            item->setText( 1, ui->ledSATVersion->text() );
+            item->setText( 2, ui->ledSATEngVersion->text() );
+        }
+        else
+        {
+            // Update program
+            for( int i=0; i<ui->cmbProgramName->count(); i++ )
+            {
+                if( ui->cmbProgramName->itemText(i).compare(item->text(0)) == 0 )
+                {
+                    ui->cmbProgramName->setItemText(i,ui->ledSATProgram->text());
+                    break;
+                }
+            }
+            item->setText( 0, ui->ledSATProgram->text() );
+        }
+    }
+    else
+    {
+        if( ui->ledSATVersion->isEnabled() )
+        {
+            // New release
+            QTreeWidgetItem *item = ui->treeSATReleases->currentItem();
+            QTreeWidgetItem *itemPrg;
+            QTreeWidgetItem *itemRelease;
+
+            if( item->text(0).length() > 0 )
+                itemPrg = item;
+            else
+                itemPrg = item->parent();
+
+            for( int i=0; i<itemPrg->childCount(); i++ )
+            {
+                if( itemPrg->child(i)->text(1).compare(ui->ledSATVersion->text()) == 0 &&
+                    itemPrg->child(i)->text(2).compare(ui->ledSATEngVersion->text()) == 0 )
+                {
+                    QMessageBox::warning( this, tr("Attention"), tr("Defined release already exists") );
+                    return;
+                }
+            }
+            QStringList      qslItem = QStringList() << "" << ui->ledSATVersion->text() << ui->ledSATEngVersion->text();
+            itemRelease = new QTreeWidgetItem( itemPrg, qslItem );
+        }
+        else
+        {
+            // New program
+            QList<QTreeWidgetItem *> lstResult = ui->treeSATReleases->findItems( ui->ledSATProgram->text(), Qt::MatchFixedString );
+
+            if( lstResult.count() > 0 )
+            {
+                QMessageBox::warning( this, tr("Attention"), tr("Defined program already exists") );
+                return;
+            }
+            else
+            {
+                QTreeWidgetItem *itemPrg = new QTreeWidgetItem( ui->treeSATReleases );
+                itemPrg->setData( 0, Qt::DisplayRole, ui->ledSATProgram->text() );
+            }
+            ui->cmbProgramName->addItem( ui->ledSATProgram->text() );
+        }
+    }
+    _saveSATTree();
+
+    m_bModifySATRelease = false;
+
+    ui->treeSATReleases->setEnabled( true );
+
+    ui->pbSATNewProgram->setEnabled( true );
+    ui->pbSATNewRelease->setEnabled( true );
+    ui->pbSATModify->setEnabled( false );
+    ui->pbSATDelete->setEnabled( false );
+
+    ui->ledSATProgram->setEnabled( false );
+    ui->ledSATVersion->setEnabled( false );
+    ui->ledSATEngVersion->setEnabled( false );
+
+    ui->pbSATSave->setEnabled( false );
+    ui->pbSATCancel->setEnabled( false );
+
+    ui->ledSATProgram->setText( "" );
+    ui->ledSATVersion->setText( "" );
+    ui->ledSATEngVersion->setText( "" );
+
+    ui->treeSATReleases->setFocus();
+}
+
+void dlgBuildPackage::on_pbSATCancel_clicked()
+{
+    m_bModifySATRelease = false;
+
+    ui->treeSATReleases->setEnabled( true );
+
+    ui->pbSATNewProgram->setEnabled( true );
+    ui->pbSATNewRelease->setEnabled( true );
+    ui->pbSATModify->setEnabled( false );
+    ui->pbSATDelete->setEnabled( false );
+
+    ui->ledSATProgram->setEnabled( false );
+    ui->ledSATVersion->setEnabled( false );
+    ui->ledSATEngVersion->setEnabled( false );
+
+    ui->pbSATSave->setEnabled( false );
+    ui->pbSATCancel->setEnabled( false );
+
+    ui->ledSATProgram->setText( "" );
+    ui->ledSATVersion->setText( "" );
+    ui->ledSATEngVersion->setText( "" );
+
+    ui->treeSATReleases->setFocus();
+}
+
+void dlgBuildPackage::_saveSATTree()
+{
+    QFile   fileSATReleases( "satreleases.xml" );
+
+    fileSATReleases.open( QIODevice::WriteOnly );
+
+    fileSATReleases.write( "<sat_releases version=\"1.0\">\n\n  <releases>\n\n" );
+
+    for( int i=0; i<ui->treeSATReleases->topLevelItemCount(); i++ )
+    {
+        QTreeWidgetItem *itemPrg = ui->treeSATReleases->topLevelItem(i);
+
+        fileSATReleases.write( QString("    <program name=\"%1\">\n").arg(itemPrg->text(0)).toStdString().c_str() );
+
+        for( int j=0; j<itemPrg->childCount(); j++ )
+        {
+            QTreeWidgetItem *itemRelease = itemPrg->child( j );
+
+            fileSATReleases.write( QString("      <release version=\"%1\" eng_version=\"%2\" />\n").arg(itemRelease->text(1)).arg(itemRelease->text(2)).toStdString().c_str() );
+        }
+
+        fileSATReleases.write( "    </program>\n\n" );
+    }
+    fileSATReleases.write( "  </releases>\n\n</sat_releases>\n");
+
+    fileSATReleases.close();
+}
+
+void dlgBuildPackage::on_pbCopySettings_clicked()
+{
+    if( ui->cmbDrive->currentIndex() > 0 )
+    {
+        ui->cmbAIFBuildDrive->setCurrentIndex( ui->cmbAIFBuildDrive->findText(ui->cmbDrive->currentText()) );
+        ui->cmbCyclerBuildDrive->setCurrentIndex( ui->cmbCyclerBuildDrive->findText(ui->cmbDrive->currentText()) );
+        ui->cmbCSSBuildDrive->setCurrentIndex( ui->cmbCSSBuildDrive->findText(ui->cmbDrive->currentText()) );
+    }
+    else
+    {
+        QMessageBox::warning( this, tr("Attention"), tr("No build drive selected!") );
+        m_bBuildCanStart = false;
+        return;
+    }
+
+    if( ui->cmbProgramName->currentIndex() > 0 && ui->ledVersionNumber->text().length() > 0 )
+    {
+        ui->ledAIFVersion->setText( QString("%1_%2").arg(ui->cmbProgramName->currentText()).arg(ui->ledVersionNumber->text()) );
+        ui->ledCyclerVersion->setText( QString("%1_%2").arg(ui->cmbProgramName->currentText()).arg(ui->ledVersionNumber->text()) );
+        ui->ledCSSVersion->setText( QString("%1_%2").arg(ui->cmbProgramName->currentText()).arg(ui->ledVersionNumber->text()) );
+    }
+    else
+    {
+        QMessageBox::warning( this, tr("Attention"), tr("No program selected!") );
+        m_bBuildCanStart = false;
+        return;
+    }
+
+    ui->chkAIFEngRelease->setChecked( ui->chkEngRelease->isChecked() );
+    on_chkAIFEngRelease_clicked();
+    ui->chkCyclerEngRelease->setChecked( ui->chkEngRelease->isChecked() );
+    on_chkCyclerEngRelease_clicked();
+    ui->chkCSSEngRelease->setChecked( ui->chkEngRelease->isChecked() );
+    on_chkCSSEngRelease_clicked();
+
+    ui->ledAIFENGNumber->setText( ui->ledEngVersion->text() );
+    ui->ledCyclerENGNumber->setText( ui->ledEngVersion->text() );
+    ui->ledCSSENGNumber->setText( ui->ledEngVersion->text() );
+}
+
+void dlgBuildPackage::on_pbBuildSatPackage_clicked()
+{
+    m_bBuildCanStart = true;
+
+    on_pbCopySettings_clicked();
+
+    if( m_bBuildCanStart )
+    {
+        ui->chkSaveAIFBuildSettings->setChecked( ui->chkSaveSettings->isChecked() );
+        ui->chkSaveCyclerBuildSettings->setChecked( ui->chkSaveSettings->isChecked() );
+        ui->chkSaveCSSBuildSettings->setChecked( ui->chkSaveSettings->isChecked() );
+
+        ui->chkPublishAIFAuto->setChecked( ui->chkPublish->isChecked() );
+        ui->chkPublishCyclerAuto->setChecked( ui->chkPublish->isChecked() );
+        ui->chkPublishCSSAuto->setChecked( ui->chkPublish->isChecked() );
+
+        ui->chkAIFSilent->setChecked( ui->chkBuildSilent->isChecked() );
+
+        on_pbStartAIFBuild_clicked();
+        on_pbStartCyclerBuild_clicked();
+        on_pbStartCSSBuild_clicked();
+    }
 }

@@ -14,6 +14,7 @@ cTMPreferences::cTMPreferences() : cPreferences()
     m_qsDirAIF                  = QString("C:/Program Files/GE Medical Systems/Testinfra/AutomationIF");
     m_qsDirAIFConf              = QString("%1/test2").arg(m_qsDirAIF);
     m_qsDirLocalReleases        = QString("D:/Users/Releases");
+    m_qsDirRemoteReleases       = QString("");
     m_qsDirCycler               = QString("C:/cycler_liberty");
     m_qsDirCyclerConf           = QString("%1/<CYCLER_VERSION>/test/engine").arg(m_qsDirCycler);
     m_qsDirCSS                  = QString("C:/cycler_liberty/CellStatusScenario");
@@ -52,6 +53,7 @@ void cTMPreferences::readSettings( QSettings *m_poSettingsFile )
     m_qsDirAIF = m_poSettingsFile->value( "Test_Config/AIFDirectory", m_qsDirAIF ).toString();
     m_qsDirAIFConf = m_poSettingsFile->value( "Test_Config/AIFTestDirectory", m_qsDirAIFConf ).toString();
     m_qsDirLocalReleases = m_poSettingsFile->value( "Releases/LocalDirectory", m_qsDirLocalReleases ).toString();
+    m_qsDirRemoteReleases = m_poSettingsFile->value( "Releases/RemoteDirectory", m_qsDirRemoteReleases ).toString();
     m_qsDirCycler = m_poSettingsFile->value( "Test_Config/CyclerDirectory", m_qsDirCycler ).toString();
     m_qsDirCyclerConf = m_poSettingsFile->value( "Test_Config/CyclerTestDirectory", m_qsDirCyclerConf ).toString();
     m_qsDirCSS = m_poSettingsFile->value( "Test_Config/CSSDirectory", m_qsDirCSS ).toString();
@@ -119,6 +121,7 @@ void cTMPreferences::writeSettings( QSettings *m_poSettingsFile ) const
     m_poSettingsFile->setValue( "Test_Config/AIFDirectory", m_qsDirAIF );
     m_poSettingsFile->setValue( "Test_Config/AIFTestDirectory", m_qsDirAIFConf );
     m_poSettingsFile->setValue( "Releases/LocalDirectory", m_qsDirLocalReleases );
+    m_poSettingsFile->setValue( "Releases/RemoteDirectory", m_qsDirRemoteReleases );
     m_poSettingsFile->setValue( "Test_Config/CyclerDirectory", m_qsDirCycler );
     m_poSettingsFile->setValue( "Test_Config/CyclerTestDirectory", m_qsDirCyclerConf );
     m_poSettingsFile->setValue( "Test_Config/CSSDirectory", m_qsDirCSS );
@@ -203,6 +206,11 @@ QString cTMPreferences::dirAIFConf() const
 QString cTMPreferences::dirLocalReleases() const
 {
     return m_qsDirLocalReleases;
+}
+
+QString cTMPreferences::dirRemoteReleases() const
+{
+    return m_qsDirRemoteReleases;
 }
 
 QString cTMPreferences::dirCycler() const
@@ -348,6 +356,11 @@ void cTMPreferences::setDirAIFConf( const QString &p_qsDirAIFConf )
 void cTMPreferences::setDirLocalReleases( const QString &p_qsDirLocalReleases )
 {
     m_qsDirLocalReleases = p_qsDirLocalReleases;
+}
+
+void cTMPreferences::setDirRemoteReleases( const QString &p_qsDirRemoteReleases )
+{
+    m_qsDirRemoteReleases = p_qsDirRemoteReleases;
 }
 
 void cTMPreferences::setDirCycler( const QString &p_qsDirCycler )

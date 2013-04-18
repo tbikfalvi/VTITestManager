@@ -140,6 +140,20 @@
             </item>
            </layout>
           </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_12">
+            <item>
+             <widget class="QLabel" name="lblDirRemoteReleases">
+              <property name="text">
+               <string>Remote directory :</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="ledDirRemoteReleases"/>
+            </item>
+           </layout>
+          </item>
          </layout>
         </widget>
        </item>

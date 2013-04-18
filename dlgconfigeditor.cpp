@@ -47,6 +47,8 @@ dlgConfigEditor::dlgConfigEditor(QWidget *parent, QString p_qsSystem, QString p_
     // Initialize the progress dialog
     m_dlgProgress = new cDlgProgress( this );
 
+    tgPrefs::instance().load();
+
     // Set the window title based on the selected system's name
     setWindowTitle( QString("Manage %1 ATP test").arg(p_qsSystem) );
 
@@ -78,6 +80,22 @@ dlgConfigEditor::dlgConfigEditor(QWidget *parent, QString p_qsSystem, QString p_
     ui->ledTesterName->setText( tgPrefs::instance().testerName() );
     ui->ledEnvironmentName->setText( tgPrefs::instance().testEnvironment() );
     ui->ledITUAddress->setText( (tgPrefs::instance().regITUAddress().compare(tr("_not_defined_"))==0?"0":tgPrefs::instance().regITUAddress()) );
+
+    QSettings   regHKLM( "HKEY_LOCAL_MACHINE\\SOFTWARE\\GE Medical Systems\\Testinfra", QSettings::NativeFormat );
+
+    QString m_qsRegInnovaPrg = regHKLM.value( "AIF/InnovaPrg", tr("<key not found>") ).toString();
+    QString m_qsRegFPPrg = regHKLM.value( "AIF/FPPrg", tr("<key not found>") ).toString();
+    QString m_qsRegAWHost = regHKLM.value( "AIF/AW/host", tr("<key not found>") ).toString();
+    QString m_qsRegFootSwitchType = regHKLM.value( "AIF/FootswitchType", tr("<key not found>") ).toString();
+    QString m_qsRegITUVersion = regHKLM.value( "AIF/ITUVersion", tr("<key not found>") ).toString();
+    QString m_qsRegTableType = regHKLM.value( "Cycler/TableType", tr("<key not found>") ).toString();
+
+    ui->ledInnovaProgram->setText( m_qsRegInnovaPrg );
+    ui->ledFluoroPlus->setText( m_qsRegFPPrg );
+    ui->ledAwHostIp->setText( m_qsRegAWHost );
+    ui->ledFootSwitchType->setText( m_qsRegFootSwitchType );
+    ui->ledITUVersion->setText( m_qsRegITUVersion );
+    ui->ledTableType->setText( m_qsRegTableType );
 }
 //============================================================================================================
 // ~dlgConfigEditor

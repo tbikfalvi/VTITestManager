@@ -31,6 +31,7 @@ dlgPreferences::dlgPreferences(QWidget *parent) : QDialog(parent), ui(new Ui::dl
     connect( ui->ledDirAIF, SIGNAL(textChanged(QString)), this, SLOT(slotSettingsChanged()) );
     connect( ui->ledDirAIFTestConfig, SIGNAL(textChanged(QString)), this, SLOT(slotSettingsChanged()) );
     connect( ui->ledDirLocalReleases, SIGNAL(textChanged(QString)), this, SLOT(slotSettingsChanged()) );
+    connect( ui->ledDirRemoteReleases, SIGNAL(textChanged(QString)), this, SLOT(slotSettingsChanged()) );
     connect( ui->ledDirCycler, SIGNAL(textChanged(QString)), this, SLOT(slotSettingsChanged()) );
     connect( ui->ledDirCyclerTestConfig, SIGNAL(textChanged(QString)), this, SLOT(slotSettingsChanged()) );
     connect( ui->rbEnvCell, SIGNAL(clicked()), this, SLOT(slotEnvironmentChanged()) );
@@ -151,6 +152,7 @@ void dlgPreferences::_loadSettings()
     QString qsDirAIF            = QString("C:/Program Files/GE Medical Systems/Testinfra/AutomationIF");
     QString qsDirConfAIF        = QString("%1/test2").arg(qsDirAIF);
     QString qsDirLocalReleases  = QString("D:/Users/Releases");
+    QString qsDirRemoteReleases = QString("\\\\med.ge.com\\fs\\emea\\DI\\Budapest\\Eng\\Vasc\\vacas\\VTI\\releases\\");
     QString qsDirCycler         = QString("C:/cycler_liberty");
     QString qsDirConfCycler     = QString("%1/<CYCLER_VERSION>/test/engine").arg(qsDirCycler);
 
@@ -164,6 +166,7 @@ void dlgPreferences::_loadSettings()
 
     ui->ledDirLocalReleases->setText( iniFile.value( "Releases/LocalDirectory", qsDirLocalReleases ).toString() );
     ui->ledDirLocalReleases->setToolTip( ui->ledDirLocalReleases->text() );
+    ui->ledDirRemoteReleases->setText( iniFile.value( "Releases/RemoteDirectory", qsDirRemoteReleases ).toString() );
 
     ui->ledDirCycler->setText( iniFile.value( "Test_Config/CyclerDirectory", qsDirCycler ).toString() );
     ui->ledDirCycler->setToolTip( ui->ledDirCycler->text() );
@@ -218,6 +221,7 @@ void dlgPreferences::_saveSettings()
     tgPrefs::instance().setDirCycler( ui->ledDirCycler->text() );
     tgPrefs::instance().setDirCyclerConf( ui->ledDirCyclerTestConfig->text() );
     tgPrefs::instance().setDirLocalReleases( ui->ledDirLocalReleases->text() );
+    tgPrefs::instance().setDirRemoteReleases( ui->ledDirRemoteReleases->text() );
 
     tgPrefs::instance().setTestcaseType( tgPrefs::instance().TC_AIF, ui->ledAIFTestcaseTypes->text().split(QChar('#')) );
     tgPrefs::instance().setTestcaseType( tgPrefs::instance().TC_CYCLER, ui->ledCyclerTestcaseTypes->text().split(QChar('#')) );

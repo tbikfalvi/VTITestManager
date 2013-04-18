@@ -32,17 +32,38 @@ private slots:
 
     void on_pbCSSInstall_clicked();
 
+    void on_pbInstallAll_clicked();
+
 private:
     Ui::dlgManageReleases *ui;
 
-    QString                 m_qsLocalDirRelease;
-    QString                 m_qsAIFFileRelease;
-    QString                 m_qsCyclerFileRelease;
-    QString                 m_qsCSSFileRelease;
+    QString m_qsLocalDirRelease;
+    QString m_qsAIFFileRelease;
+    QString m_qsCyclerFileRelease;
+    QString m_qsCSSFileRelease;
+    bool    m_bSilentInstall;
+    QString m_qsRegAIFVersion;
+    QString m_qsRegInnovaPrg;
+    QString m_qsRegFPPrg;
+    QString m_qsRegEngPC_IP;
+    QString m_qsRegDL_IP;
+    QString m_qsRegAWHost;
+    QString m_qsRegKeypadPort;
+    QString m_qsRegPosIPAddress;
+    QString m_qsRegPosLogPort;
+    QString m_qsRegTablePosLogPort;
+    QString m_qsRegFootSwitchType;
+    QString m_qsRegITUVersion;
+    QString m_qsRegTableType;
+    QString m_qsRegItuIP;
 
-    void                    _fillListAIFReleases();
-    void                    _fillListCyclerReleases();
-    void                    _fillListCSSReleases();
+    void    _fillListAIFReleases();
+    void    _fillListCyclerReleases();
+    void    _fillListCSSReleases();
+    void    _loadRegistrySettings();
+    void    _loadBackupSettings();
+    void    _backupRegistrySettings();
+    void    _restoreRegistrySettings();
 };
 
 #endif // DLGMANAGERELEASES_H

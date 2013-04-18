@@ -11,7 +11,7 @@ class cTMPreferences : public cPreferences
 {
 public:
 
-    static const QString qsAppVersion() { return QString( "1.5.7.1" ); }
+    static const QString qsAppVersion() { return QString( "1.5.9.0" ); }
 
     enum actionList {
         ACT_NONE = 0,
@@ -42,6 +42,7 @@ public:
     QString         dirAIF() const;
     QString         dirAIFConf() const;
     QString         dirLocalReleases() const;
+    QString         dirRemoteReleases() const;
     QString         dirCycler() const;
     QString         dirCyclerConf() const;
     QString         dirCSS() const;
@@ -72,6 +73,7 @@ public:
     void            setDirAIF( const QString &p_qsDirAIF );
     void            setDirAIFConf( const QString &p_qsDirAIFConf );
     void            setDirLocalReleases( const QString &p_qsDirLocalReleases );
+    void            setDirRemoteReleases( const QString &p_qsDirRemoteReleases );
     void            setDirCycler( const QString &p_qsDirCycler );
     void            setDirCyclerConf( const QString &p_qsDirCyclerConf );
     void            setDirCSS( const QString &p_qsDirCSS );
@@ -110,6 +112,7 @@ private:
     QString         m_qsDirAIF;
     QString         m_qsDirAIFConf;
     QString         m_qsDirLocalReleases;
+    QString         m_qsDirRemoteReleases;
     QString         m_qsDirCycler;
     QString         m_qsDirCyclerConf;
     QString         m_qsDirCSS;

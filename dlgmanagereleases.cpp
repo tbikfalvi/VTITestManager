@@ -54,13 +54,15 @@ dlgManageReleases::dlgManageReleases(QWidget *parent) : QDialog(parent), ui(new 
     ui->ledCurrentDir->setText( m_qsLocalDirRelease );
     ui->ledCurrentDir->setToolTip( m_qsLocalDirRelease );
 
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    _loadRegistrySettings();
 
-    ui->ledRegAIFVersion->setText( iniFile.value( "AIF/Version", tr("<key not found>") ).toString() );
-    ui->ledRegInnovaPrg->setText( iniFile.value( "AIF/InnovaPrg", tr("<key not found>") ).toString() );
-    ui->ledRegFPProgram->setText( iniFile.value( "AIF/FPPrg", tr("<key not found>") ).toString() );
-    ui->ledRegIPEng->setText( iniFile.value( "AIF/engPC_IP", tr("<key not found>") ).toString() );
-    ui->ledRegIPAW->setText( iniFile.value( "AW/host", tr("<key not found>") ).toString() );
+    ui->ledRegAIFVersion->setText( m_qsRegAIFVersion );
+    ui->ledRegInnovaPrg->setText( m_qsRegInnovaPrg );
+    ui->ledRegFPProgram->setText( m_qsRegFPPrg );
+    ui->ledRegIPEng->setText( m_qsRegEngPC_IP );
+    ui->ledRegIPAW->setText( m_qsRegAWHost );
+    ui->ledFootSwitchType->setText( m_qsRegFootSwitchType );
+    ui->ledITUVersion->setText( m_qsRegITUVersion );
 
     _fillListAIFReleases();
     _fillListCyclerReleases();
@@ -136,6 +138,17 @@ void dlgManageReleases::on_pbAIFInstall_clicked()
                                      "3 > An error occurred when attempting to read from the process.\n"
                                      "5 > An unknown error occurred.").arg(qsRelease).arg(qpAIFInstall->error()) );
         }
+        else
+        {
+            if( QMessageBox::question( this, tr("Question"),
+                                       tr("Do you want to restore important registry settings after install?\n\n"
+                                          "Please click Yes only after AIF installation finished."),
+                                       QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
+            {
+                _loadBackupSettings();
+                _restoreRegistrySettings();
+            }
+        }
     }
 }
 //============================================================================================================
@@ -145,6 +158,14 @@ void dlgManageReleases::on_pbAIFInstall_clicked()
 //============================================================================================================
 void dlgManageReleases::on_pbAIFUninstall_clicked()
 {
+    if( QMessageBox::question( this, tr("Question"),
+                               tr("Do you want to save important registry settings before uninstall?"),
+                               QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
+    {
+        _loadRegistrySettings();
+        _backupRegistrySettings();
+    }
+
     QSettings   obReg( QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall"), QSettings::NativeFormat );
     QStringList qslFolders  = obReg.childGroups();
     QString     qsProcess   = "";
@@ -230,7 +251,7 @@ void dlgManageReleases::on_pbCyclerInstall_clicked()
                                      "-2 > Process cannot be started\n"
                                      "-1 > Process crashed").arg(qsProcess).arg(nRet) );
         }
-        else
+        else if( !m_bSilentInstall )
         {
             QMessageBox::information( this, tr("Information"),
                                       tr("Installing selected cycler package finished."));
@@ -276,7 +297,7 @@ void dlgManageReleases::on_pbCSSInstall_clicked()
                                      "-2 > Process cannot be started\n"
                                      "-1 > Process crashed").arg(qsProcess).arg(nRet) );
         }
-        else
+        else if( !m_bSilentInstall )
         {
             QMessageBox::information( this, tr("Information"),
                                       tr("Installing selected 5 Min. Check package finished."));
@@ -413,3 +434,122 @@ void dlgManageReleases::on_listCSSReleases_clicked(const QModelIndex &index)
     }
 }
 //============================================================================================================
+void dlgManageReleases::on_pbInstallAll_clicked()
+{
+    m_bSilentInstall = true;
+
+    if( ui->pbCSSInstall->isEnabled() )
+    {
+        on_pbCSSInstall_clicked();
+    }
+
+    if( ui->pbCyclerInstall->isEnabled() )
+    {
+        on_pbCyclerInstall_clicked();
+    }
+
+    if( ui->pbAIFInstall->isEnabled() )
+    {
+        if( QMessageBox::question( this, tr("Question"),
+                                   tr("Do you want to uninstall current AIF release?"),
+                                   QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
+        {
+            on_pbAIFUninstall_clicked();
+        }
+        on_pbAIFInstall_clicked();
+    }
+
+    m_bSilentInstall = true;
+}
+
+void dlgManageReleases::_loadRegistrySettings()
+{
+    QSettings   regHKLM( "HKEY_LOCAL_MACHINE\\SOFTWARE\\GE Medical Systems\\Testinfra", QSettings::NativeFormat );
+
+    m_qsRegAIFVersion = regHKLM.value( "AIF/Version", tr("<key not found>") ).toString();
+    m_qsRegInnovaPrg = regHKLM.value( "AIF/InnovaPrg", tr("<key not found>") ).toString();
+    m_qsRegFPPrg = regHKLM.value( "AIF/FPPrg", tr("<key not found>") ).toString();
+
+    m_qsRegEngPC_IP = regHKLM.value( "AIF/engPC_IP", tr("<key not found>") ).toString();
+    m_qsRegDL_IP = regHKLM.value( "AIF/DL_IP", tr("<key not found>") ).toString();
+
+    m_qsRegAWHost = regHKLM.value( "AIF/AW/host", tr("<key not found>") ).toString();
+
+    m_qsRegKeypadPort = regHKLM.value( "AIF/Keypad/KeypadPort", tr("<key not found>") ).toString();
+
+    m_qsRegPosIPAddress = regHKLM.value( "AIF/Log/PosIPAddress", tr("<key not found>") ).toString();
+    m_qsRegPosLogPort = regHKLM.value( "AIF/Log/PosLogPort", tr("<key not found>") ).toString();
+    m_qsRegTablePosLogPort = regHKLM.value( "AIF/Log/TablePosLogPort", tr("<key not found>") ).toString();
+    m_qsRegFootSwitchType = regHKLM.value( "AIF/FootswitchType", tr("<key not found>") ).toString();
+    m_qsRegITUVersion = regHKLM.value( "AIF/ITUVersion", tr("<key not found>") ).toString();
+
+    m_qsRegTableType = regHKLM.value( "Cycler/TableType", tr("<key not found>") ).toString();
+    m_qsRegItuIP = regHKLM.value( "Cycler/TempData/itu ip", tr("<key not found>") ).toString();
+}
+
+void dlgManageReleases::_loadBackupSettings()
+{
+    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+
+    m_qsRegEngPC_IP = iniFile.value( "AIF/engPC_IP", tr("<key not found>") ).toString();
+    m_qsRegDL_IP = iniFile.value( "AIF/DL_IP", tr("<key not found>") ).toString();
+
+    m_qsRegAWHost = iniFile.value( "AW/host", tr("<key not found>") ).toString();
+
+    m_qsRegKeypadPort = iniFile.value( "Keypad/KeypadPort", tr("<key not found>") ).toString();
+
+    m_qsRegPosIPAddress = iniFile.value( "Log/PosIPAddress", tr("<key not found>") ).toString();
+    m_qsRegPosLogPort = iniFile.value( "Log/PosLogPort", tr("<key not found>") ).toString();
+    m_qsRegTablePosLogPort = iniFile.value( "Log/TablePosLogPort", tr("<key not found>") ).toString();
+    m_qsRegFootSwitchType = iniFile.value( "AIF/FootswitchType", tr("<key not found>") ).toString();
+    m_qsRegITUVersion = iniFile.value( "AIF/ITUVersion", tr("<key not found>") ).toString();
+
+    m_qsRegTableType = iniFile.value( "Cycler/TableType", tr("<key not found>") ).toString();
+    m_qsRegItuIP = iniFile.value( "Cycler/itu ip", tr("<key not found>") ).toString();
+}
+
+void dlgManageReleases::_backupRegistrySettings()
+{
+    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+
+    iniFile.setValue( "AIF/Version", m_qsRegAIFVersion );
+    iniFile.setValue( "AIF/InnovaPrg", m_qsRegInnovaPrg );
+    iniFile.setValue( "AIF/FPPrg", m_qsRegFPPrg );
+
+    iniFile.setValue( "AIF/engPC_IP", m_qsRegEngPC_IP );
+    iniFile.setValue( "AIF/DL_IP", m_qsRegDL_IP );
+
+    iniFile.setValue( "AW/host", m_qsRegAWHost );
+
+    iniFile.setValue( "Keypad/KeypadPort", m_qsRegKeypadPort );
+
+    iniFile.setValue( "Log/PosIPAddress", m_qsRegPosIPAddress );
+    iniFile.setValue( "Log/PosLogPort", m_qsRegPosLogPort );
+    iniFile.setValue( "Log/TablePosLogPort", m_qsRegTablePosLogPort );
+    iniFile.setValue( "AIF/FootswitchType", m_qsRegFootSwitchType );
+    iniFile.setValue( "AIF/ITUVersion", m_qsRegITUVersion );
+
+    iniFile.setValue( "Cycler/TableType", m_qsRegTableType );
+    iniFile.setValue( "Cycler/itu ip", m_qsRegItuIP );
+}
+
+void dlgManageReleases::_restoreRegistrySettings()
+{
+    QSettings   regHKLM( "HKEY_LOCAL_MACHINE\\SOFTWARE\\GE Medical Systems\\Testinfra", QSettings::NativeFormat );
+
+    regHKLM.setValue( "AIF/engPC_IP", m_qsRegEngPC_IP );
+    regHKLM.setValue( "AIF/DL_IP", m_qsRegDL_IP );
+
+    regHKLM.setValue( "AIF/AW/host", m_qsRegAWHost );
+
+    regHKLM.setValue( "AIF/Keypad/KeypadPort", m_qsRegKeypadPort );
+
+    regHKLM.setValue( "AIF/Log/PosIPAddress", m_qsRegPosIPAddress );
+    regHKLM.setValue( "AIF/Log/PosLogPort", m_qsRegPosLogPort );
+    regHKLM.setValue( "AIF/Log/TablePosLogPort", m_qsRegTablePosLogPort );
+    regHKLM.setValue( "AIF/FootswitchType", m_qsRegFootSwitchType );
+    regHKLM.setValue( "AIF/ITUVersion", m_qsRegITUVersion );
+
+    regHKLM.setValue( "Cycler/TableType", m_qsRegTableType );
+    regHKLM.setValue( "Cycler/TempData/itu ip", m_qsRegItuIP );
+}
