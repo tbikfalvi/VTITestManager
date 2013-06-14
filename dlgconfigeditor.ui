@@ -391,19 +391,6 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QListWidget" name="listTestElements">
-            <property name="editTriggers">
-             <set>QAbstractItemView::EditKeyPressed</set>
-            </property>
-            <property name="selectionMode">
-             <enum>QAbstractItemView::MultiSelection</enum>
-            </property>
-            <property name="selectionBehavior">
-             <enum>QAbstractItemView::SelectRows</enum>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="1">
            <widget class="QListWidget" name="listTestTypes">
             <property name="maximumSize">
@@ -415,6 +402,42 @@
             <property name="selectionMode">
              <enum>QAbstractItemView::MultiSelection</enum>
             </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QTreeWidget" name="treeTestElements">
+            <property name="autoExpandDelay">
+             <number>-1</number>
+            </property>
+            <property name="allColumnsShowFocus">
+             <bool>true</bool>
+            </property>
+            <property name="columnCount">
+             <number>4</number>
+            </property>
+            <attribute name="headerDefaultSectionSize">
+             <number>50</number>
+            </attribute>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string notr="true">2</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string notr="true">3</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string notr="true">4</string>
+             </property>
+            </column>
            </widget>
           </item>
          </layout>

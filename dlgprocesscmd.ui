@@ -207,6 +207,9 @@
            <iconset resource="vtitestmanager.qrc">
             <normaloff>:/images/refresh.png</normaloff>:/images/refresh.png</iconset>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -365,6 +368,21 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>cmbDrive</tabstop>
+  <tabstop>ledProcessPath</tabstop>
+  <tabstop>pbChangeDir</tabstop>
+  <tabstop>chkSavePath</tabstop>
+  <tabstop>cmbCommand</tabstop>
+  <tabstop>chkSaveProcess</tabstop>
+  <tabstop>pbClearOutput</tabstop>
+  <tabstop>pbProcess</tabstop>
+  <tabstop>cmbMessage</tabstop>
+  <tabstop>pbEnterMsg</tabstop>
+  <tabstop>ptStdOut</tabstop>
+  <tabstop>pbExit</tabstop>
+  <tabstop>pbExitDlg</tabstop>
+ </tabstops>
  <resources>
   <include location="vtitestmanager.qrc"/>
  </resources>

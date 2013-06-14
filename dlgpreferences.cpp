@@ -26,6 +26,8 @@ dlgPreferences::dlgPreferences(QWidget *parent) : QDialog(parent), ui(new Ui::dl
 {
     ui->setupUi(this);
 
+    setWindowTitle( QString("Manage application preferences") );
+
     bSettingsChanged = true;
 
     connect( ui->ledDirAIF, SIGNAL(textChanged(QString)), this, SLOT(slotSettingsChanged()) );
@@ -44,10 +46,22 @@ dlgPreferences::dlgPreferences(QWidget *parent) : QDialog(parent), ui(new Ui::dl
     _loadSettings();
 
     bSettingsChanged = false;
+
+    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    int         dlgWidth    = iniFile.value( "Dialogs/Preferences_width", 526 ).toInt();
+    int         dlgHeight   = iniFile.value( "Dialogs/Preferences_height", 467 ).toInt();
+    QPoint      qpDlgSize   = QPoint( dlgWidth, dlgHeight );
+
+    resize( qpDlgSize.x(), qpDlgSize.y() );
 }
 
 dlgPreferences::~dlgPreferences()
 {
+    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+
+    iniFile.setValue( "Dialogs/ProcessCommand_width", width() );
+    iniFile.setValue( "Dialogs/ProcessCommand_height", height() );
+
     delete ui;
 }
 

@@ -68,9 +68,14 @@ dlgConfigEditor::dlgConfigEditor(QWidget *parent, QString p_qsSystem, QString p_
         ui->ledReleaseVersion->setText( _getCyclerVersionFromPath(p_qsDirConf) );
     }
 
+    QStringList qslHeader = QStringList() << "Selection" << "Test case" << "File / Test procedure" << "Flags";
+
+    ui->treeTestElements->setHeaderLabels( qslHeader );
+
     // Set private members
-    m_qsDir     = p_qsDir;
-    m_qsDirConf = p_qsDirConf;
+    m_qsDir         = p_qsDir;
+    m_qsDirConf     = p_qsDirConf;
+    m_qsDirConfOrig = p_qsDirConf;
 
     m_qsFileName = QString( "%1/%2" ).arg(m_qsDirConf).arg(ui->ledFileName->text());
 
@@ -96,6 +101,13 @@ dlgConfigEditor::dlgConfigEditor(QWidget *parent, QString p_qsSystem, QString p_
     ui->ledFootSwitchType->setText( m_qsRegFootSwitchType );
     ui->ledITUVersion->setText( m_qsRegITUVersion );
     ui->ledTableType->setText( m_qsRegTableType );
+
+    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    int         dlgWidth    = iniFile.value( "Dialogs/ConfigEditor_width", 724 ).toInt();
+    int         dlgHeight   = iniFile.value( "Dialogs/ConfigEditor_height", 705 ).toInt();
+    QPoint      qpDlgSize   = QPoint( dlgWidth, dlgHeight );
+
+    resize( qpDlgSize.x(), qpDlgSize.y() );
 }
 //============================================================================================================
 // ~dlgConfigEditor
@@ -105,6 +117,11 @@ dlgConfigEditor::dlgConfigEditor(QWidget *parent, QString p_qsSystem, QString p_
 dlgConfigEditor::~dlgConfigEditor()
 {
     cTracer tracer("~dlgConfigEditor");
+
+    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+
+    iniFile.setValue( "Dialogs/ConfigEditor_width", width() );
+    iniFile.setValue( "Dialogs/ConfigEditor_height", height() );
 
     tgPrefs::instance().save();
 
@@ -142,6 +159,10 @@ void dlgConfigEditor::on_pbResetFileName_clicked()
     cTracer tracer("on_pbResetFileName_clicked");
 
     ui->ledFileName->setText( "ATP.config" );
+    m_qsDirConf = m_qsDirConfOrig;
+
+    m_qsFileName = QString( "%1/%2" ).arg(m_qsDirConf).arg(ui->ledFileName->text());
+    ui->ledFileName->setToolTip( m_qsFileName );
 }
 //============================================================================================================
 // on_pbProcessConfig_clicked
@@ -181,7 +202,27 @@ void dlgConfigEditor::on_listTestTypes_itemClicked(QListWidgetItem *item)
     bool    bSelection = item->isSelected();
     QString qsItem = item->text();
 
-    for( int i=0; i<ui->listTestElements->count(); i++ )
+    for( int i=0; i<ui->treeTestElements->topLevelItemCount(); i++ )
+    {
+        QTreeWidgetItem *itemTestCases = ui->treeTestElements->topLevelItem(i);
+
+        if( itemTestCases->text(3).contains(qsItem) )
+        {
+            itemTestCases->setCheckState( 0, (bSelection?Qt::Checked:Qt::Unchecked) );
+        }
+
+        for( int j=0; j<itemTestCases->childCount(); j++ )
+        {
+            QTreeWidgetItem *itemTestProcedure = itemTestCases->child( j );
+
+            if( itemTestProcedure->text(3).contains(qsItem) )
+            {
+                itemTestProcedure->setCheckState( 0, (bSelection?Qt::Checked:Qt::Unchecked) );
+            }
+        }
+    }
+
+    /*for( int i=0; i<ui->listTestElements->count(); i++ )
     {
         QString qsComment = ui->listTestElements->item(i)->text();
 
@@ -194,7 +235,7 @@ void dlgConfigEditor::on_listTestTypes_itemClicked(QListWidgetItem *item)
                 ui->listTestElements->item(i)->setSelected( bSelection );
             }
         }
-    }
+    }*/
 }
 //============================================================================================================
 // on_pbExit_clicked
@@ -224,6 +265,7 @@ void dlgConfigEditor::on_pbSave_clicked()
                                QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
     {
         m_dlgProgress->showProgress();
+        on_pbResetFileName_clicked();
         _saveConfigSettings();
         m_dlgProgress->hideProgress();
     }
@@ -239,10 +281,23 @@ void dlgConfigEditor::on_pbSelectAll_clicked()
     {
         ui->listTestTypes->item(i)->setSelected( true );
     }
-    for( int i=0; i<ui->listTestElements->count(); i++ )
+    for( int i=0; i<ui->treeTestElements->topLevelItemCount(); i++ )
+    {
+        QTreeWidgetItem *itemTestCases = ui->treeTestElements->topLevelItem(i);
+
+        itemTestCases->setCheckState( 0, Qt::Checked );
+
+        for( int j=0; j<itemTestCases->childCount(); j++ )
+        {
+            QTreeWidgetItem *itemTestProcedure = itemTestCases->child( j );
+
+            itemTestProcedure->setCheckState( 0, Qt::Checked );
+        }
+    }
+    /*for( int i=0; i<ui->listTestElements->count(); i++ )
     {
         ui->listTestElements->item(i)->setSelected( true );
-    }
+    }*/
 }
 //============================================================================================================
 //
@@ -255,10 +310,23 @@ void dlgConfigEditor::on_pbDeselectAll_clicked()
     {
         ui->listTestTypes->item(i)->setSelected( false );
     }
-    for( int i=0; i<ui->listTestElements->count(); i++ )
+    for( int i=0; i<ui->treeTestElements->topLevelItemCount(); i++ )
+    {
+        QTreeWidgetItem *itemTestCases = ui->treeTestElements->topLevelItem(i);
+
+        itemTestCases->setCheckState( 0, Qt::Unchecked );
+
+        for( int j=0; j<itemTestCases->childCount(); j++ )
+        {
+            QTreeWidgetItem *itemTestProcedure = itemTestCases->child( j );
+
+            itemTestProcedure->setCheckState( 0, Qt::Unchecked );
+        }
+    }
+    /*for( int i=0; i<ui->listTestElements->count(); i++ )
     {
         ui->listTestElements->item(i)->setSelected( false );
-    }
+    }*/
 }
 //============================================================================================================
 // _readConfigFile
@@ -329,7 +397,9 @@ void dlgConfigEditor::_fillListView()
 {
     cTracer tracer("_fillListView");
 
-    ui->listTestElements->clear();
+    //ui->listTestElements->clear();
+    ui->treeTestElements->clear();
+    m_qslSelectedComments.clear();
 
     for( int i=0; i<m_vTestCases.count(); i++ )
     {
@@ -337,7 +407,7 @@ void dlgConfigEditor::_fillListView()
         QStringList qslTestCase = qslTest.at(0).split(QChar('|'));
 
         QString qsName      = qslTestCase.at(0);
-        QString qsTitle     = ( qslTestCase.count()>3 ? QString(" (%1) ").arg(qslTestCase.at(3)) : "" );
+        QString qsTitle     = ( qslTestCase.count()>3 ? QString("%1").arg(qslTestCase.at(3)) : "" );
         QString qsComment   = QString( qslTestCase.at(2).length()>0 ? QString("%1").arg(qslTestCase.at(2)) : "" ).remove(QChar('#')).trimmed();
 
         if( qsComment.length() > 0 )
@@ -356,11 +426,25 @@ void dlgConfigEditor::_fillListView()
             }
         }
 
-        ui->listTestElements->addItem( QString("%1%2%3").arg(qsName).arg(qsTitle).arg(qsComment.length()>0?QString(" #%1").arg(qsComment):"") );
+        //ui->listTestElements->addItem( QString("%1%2%3").arg(qsName).arg(qsTitle).arg(qsComment.length()>0?QString(" #%1").arg(qsComment):"") );
+
+        QTreeWidgetItem *itemTestCase;
+        QTreeWidgetItem *itemTestProcedure;
+
+        itemTestCase = new QTreeWidgetItem( ui->treeTestElements );
+        itemTestCase->setData( 1, Qt::DisplayRole, qsName );
+        itemTestCase->setData( 2, Qt::DisplayRole, qsTitle );
+        itemTestCase->setData( 3, Qt::DisplayRole, qsComment );
 
         if( qslTestCase.at(1).compare("1") == 0 )
         {
-            ui->listTestElements->item( ui->listTestElements->count()-1 )->setSelected( true );
+            //ui->listTestElements->item( ui->listTestElements->count()-1 )->setSelected( true );
+            itemTestCase->setCheckState( 0, Qt::Checked );
+            _fillSelectedComments( qsComment );
+        }
+        else
+        {
+            itemTestCase->setCheckState( 0, Qt::Unchecked );
         }
 
         for( int j=1; j<qslTest.count(); j++ )
@@ -375,14 +459,29 @@ void dlgConfigEditor::_fillListView()
                 tgPrefs::instance().addTestcaseType( m_tcSystemType, qsComment );
             }
 
-            ui->listTestElements->addItem( QString("\t%1%2").arg(qsName).arg(qsComment.length()>0?QString(" #%1").arg(qsComment):"") );
+            //ui->listTestElements->addItem( QString("\t%1%2").arg(qsName).arg(qsComment.length()>0?QString(" #%1").arg(qsComment):"") );
+
+            itemTestProcedure = new QTreeWidgetItem( itemTestCase );
+            itemTestProcedure->setData( 2, Qt::DisplayRole, qsName );
+            itemTestProcedure->setData( 3, Qt::DisplayRole, qsComment );
 
             if( qslTestCase.at(1).compare("1") == 0 )
             {
-                ui->listTestElements->item( ui->listTestElements->count()-1 )->setSelected( true );
+                //ui->listTestElements->item( ui->listTestElements->count()-1 )->setSelected( true );
+                itemTestProcedure->setCheckState( 0, Qt::Checked );
+                _fillSelectedComments( qsComment );
+            }
+            else
+            {
+                itemTestProcedure->setCheckState( 0, Qt::Unchecked );
             }
         }
     }
+    ui->treeTestElements->expandAll();
+    ui->treeTestElements->resizeColumnToContents(0);
+    ui->treeTestElements->resizeColumnToContents(1);
+    ui->treeTestElements->resizeColumnToContents(2);
+    ui->treeTestElements->resizeColumnToContents(3);
 }
 //============================================================================================================
 // _fillListTypes
@@ -401,14 +500,9 @@ void dlgConfigEditor::_fillListTypes()
     {
         ui->listTestTypes->addItem( qslTestcaseTypes.at(i) );
 
-        for( int j=0; j<ui->listTestElements->selectedItems().count(); j++ )
+        if( m_qslSelectedComments.contains(qslTestcaseTypes.at(i),Qt::CaseInsensitive) )
         {
-            QString qsItem = ui->listTestElements->selectedItems().at(j)->text();
-
-            if( qsItem.contains(qslTestcaseTypes.at(i)) )
-            {
-                ui->listTestTypes->item( ui->listTestTypes->count()-1 )->setSelected( true );
-            }
+            ui->listTestTypes->item( ui->listTestTypes->count()-1 )->setSelected( true );
         }
     }
 }
@@ -465,6 +559,44 @@ void dlgConfigEditor::_saveConfigSettings()
         fileConfig.write( QString("        <setting itu_address=\"%1\" />\n").arg(ui->ledITUAddress->text()).toStdString().c_str() );
         fileConfig.write( "    </header>\n\n    <testcases>\n" );
 
+        for( int i=0; i<ui->treeTestElements->topLevelItemCount(); i++ )
+        {
+            QString          qsLine;
+            QTreeWidgetItem *itemTestCase = ui->treeTestElements->topLevelItem(i);
+
+            qsLine = "";
+            qsLine.append( "\n        <testitem name=\"" );
+            qsLine.append( itemTestCase->text(2) );
+            qsLine.append( "\" filename=\"" );
+            qsLine.append( itemTestCase->text(1) );
+            qsLine.append( "\" execute=\"" );
+            qsLine.append( (itemTestCase->checkState(0)==Qt::Checked?"1":"0") );
+            qsLine.append( "\" flags=\"" );
+            qsLine.append( itemTestCase->text(3) );
+            qsLine.append( "\">\n" );
+
+            fileConfig.write( qsLine.toStdString().c_str() );
+
+            for( int j=0; j<itemTestCase->childCount(); j++ )
+            {
+                QTreeWidgetItem *itemTestProcedure = itemTestCase->child( j );
+
+                qsLine = "";
+                qsLine.append( "            <testproc name=\"" );
+                qsLine.append( itemTestProcedure->text(2) );
+                qsLine.append( "\" execute=\"" );
+                qsLine.append( (itemTestProcedure->checkState(0)==Qt::Checked?"1":"0") );
+                qsLine.append( "\" flags=\"" );
+                qsLine.append( itemTestProcedure->text(3) );
+                qsLine.append( "\" />\n" );
+
+                fileConfig.write( qsLine.toStdString().c_str() );
+            }
+
+            fileConfig.write( "        </testitem>\n" );
+        }
+
+        /*
         bool    bTestItemStarted = false;
 
         for( int i=0; i<ui->listTestElements->count(); i++ )
@@ -496,11 +628,12 @@ void dlgConfigEditor::_saveConfigSettings()
         if( bTestItemStarted )
         {
             fileConfig.write( "\n        </testitem>\n" );
-        }
+        }*/
         fileConfig.write( "\n    </testcases>\n\n</atp_config>\n" );
         fileConfig.write( QString("\n").toStdString().c_str() );
     }
-    else
+    // No need for supporting old version config file
+    /*else
     {
         fileConfig.write( QString("<fail-silent> %1\n").arg((ui->chkSilent->isChecked()?"1":"0")).toStdString().c_str() );
         if( m_tcSystemType == tgPrefs::instance().TC_AIF )
@@ -539,7 +672,7 @@ void dlgConfigEditor::_saveConfigSettings()
             fileConfig.write( QString("%1\n").arg(qsLine).toStdString().c_str() );
         }
         fileConfig.write( QString("\n").toStdString().c_str() );
-    }
+    }*/
 
     fileConfig.close();
 }
@@ -631,4 +764,34 @@ QString dlgConfigEditor::_getCyclerVersionFromPath(const QString &p_qsPath) cons
     return qsRet;
 }
 //============================================================================================================
+void dlgConfigEditor::on_treeTestElements_itemClicked(QTreeWidgetItem *item, int column)
+{
+    if( column == 0 )
+    {
+        if( item->childCount() > 0 )
+        {
+            for( int i=0; i<item->childCount(); i++ )
+            {
+                QTreeWidgetItem *itemChild = item->child(i);
 
+                itemChild->setCheckState( 0, item->checkState(0) );
+            }
+        }
+    }
+}
+void dlgConfigEditor::_fillSelectedComments(QString &p_qsComment)
+{
+    QStringList qslComments = p_qsComment.split(',');
+
+    for( int i=0; i<qslComments.count(); i++ )
+    {
+        if( !m_qslSelectedComments.contains( qslComments.at(i).trimmed(),Qt::CaseInsensitive ) )
+        {
+            m_qslSelectedComments.append( qslComments.at(i).trimmed() );
+        }
+    }
+    if( !m_qslSelectedComments.contains( p_qsComment.trimmed(),Qt::CaseInsensitive ) )
+    {
+        m_qslSelectedComments.append( p_qsComment.trimmed() );
+    }
+}

@@ -45,6 +45,8 @@ dlgManageReleases::dlgManageReleases(QWidget *parent) : QDialog(parent), ui(new 
 {
     ui->setupUi(this);
 
+    setWindowTitle( QString("Manage SAT Releases") );
+
     ui->pbAIFInstall->setEnabled( false );
     ui->pbCyclerInstall->setEnabled( false );
     ui->pbCSSInstall->setEnabled( false );
@@ -67,6 +69,13 @@ dlgManageReleases::dlgManageReleases(QWidget *parent) : QDialog(parent), ui(new 
     _fillListAIFReleases();
     _fillListCyclerReleases();
     _fillListCSSReleases();
+
+    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    int         dlgWidth    = iniFile.value( "Dialogs/ManageReleases_width", 702 ).toInt();
+    int         dlgHeight   = iniFile.value( "Dialogs/ManageReleases_height", 634 ).toInt();
+    QPoint      qpDlgSize   = QPoint( dlgWidth, dlgHeight );
+
+    resize( qpDlgSize.x(), qpDlgSize.y() );
 }
 //============================================================================================================
 //
@@ -75,6 +84,10 @@ dlgManageReleases::dlgManageReleases(QWidget *parent) : QDialog(parent), ui(new 
 //============================================================================================================
 dlgManageReleases::~dlgManageReleases()
 {
+    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+
+    iniFile.setValue( "Dialogs/ManageReleases_width", width() );
+    iniFile.setValue( "Dialogs/ManageReleases_height", height() );
     delete ui;
 }
 //============================================================================================================
@@ -166,9 +179,10 @@ void dlgManageReleases::on_pbAIFUninstall_clicked()
         _backupRegistrySettings();
     }
 
+    QString     qsProcess   = "MsiExec.exe /passive /x {434699A4-2838-4A36-91A8-21AD8DC5908A}";
+/*
     QSettings   obReg( QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall"), QSettings::NativeFormat );
     QStringList qslFolders  = obReg.childGroups();
-    QString     qsProcess   = "";
 
     for( int i=0; i<qslFolders.size(); i++ )
     {
@@ -189,14 +203,14 @@ void dlgManageReleases::on_pbAIFUninstall_clicked()
                                   "Please uninstall AIF manually.") );
         return;
     }
-
-    QProcess *qpAIFInstall = new QProcess(this);
-
     tgLogger::instance() << cSeverity::DEBUG
                          << "Uninstall process: \""
                          << qsProcess
                          << "\""
                          << cLogMessage::EOM;
+
+*/
+    QProcess *qpAIFInstall = new QProcess(this);
 
     int nRet = qpAIFInstall->execute( QString("%1").arg( qsProcess ) );
 

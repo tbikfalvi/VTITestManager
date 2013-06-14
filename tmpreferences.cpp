@@ -18,6 +18,7 @@ cTMPreferences::cTMPreferences() : cPreferences()
     m_qsDirCycler               = QString("C:/cycler_liberty");
     m_qsDirCyclerConf           = QString("%1/<CYCLER_VERSION>/test/engine").arg(m_qsDirCycler);
     m_qsDirCSS                  = QString("C:/cycler_liberty/CellStatusScenario");
+    m_qsDirSatReleaseXml        = QString("//med.ge.com/fs/emea/DI/Budapest/Eng/Vasc/vacas/VTI/releases");
     m_qsRegAIFVersion           = QObject::tr("_not_defined_");
     m_qsRegITUAddress           = QObject::tr("_not_defined_");
     m_bIsRunningOnDevelopmentPC = false;
@@ -54,6 +55,7 @@ void cTMPreferences::readSettings( QSettings *m_poSettingsFile )
     m_qsDirAIFConf = m_poSettingsFile->value( "Test_Config/AIFTestDirectory", m_qsDirAIFConf ).toString();
     m_qsDirLocalReleases = m_poSettingsFile->value( "Releases/LocalDirectory", m_qsDirLocalReleases ).toString();
     m_qsDirRemoteReleases = m_poSettingsFile->value( "Releases/RemoteDirectory", m_qsDirRemoteReleases ).toString();
+    m_qsDirSatReleaseXml = m_poSettingsFile->value( "Releases/SatReleaseDirectory", m_qsDirSatReleaseXml ).toString();
     m_qsDirCycler = m_poSettingsFile->value( "Test_Config/CyclerDirectory", m_qsDirCycler ).toString();
     m_qsDirCyclerConf = m_poSettingsFile->value( "Test_Config/CyclerTestDirectory", m_qsDirCyclerConf ).toString();
     m_qsDirCSS = m_poSettingsFile->value( "Test_Config/CSSDirectory", m_qsDirCSS ).toString();
@@ -122,6 +124,7 @@ void cTMPreferences::writeSettings( QSettings *m_poSettingsFile ) const
     m_poSettingsFile->setValue( "Test_Config/AIFTestDirectory", m_qsDirAIFConf );
     m_poSettingsFile->setValue( "Releases/LocalDirectory", m_qsDirLocalReleases );
     m_poSettingsFile->setValue( "Releases/RemoteDirectory", m_qsDirRemoteReleases );
+    m_poSettingsFile->setValue( "Releases/SatReleaseDirectory", m_qsDirSatReleaseXml );
     m_poSettingsFile->setValue( "Test_Config/CyclerDirectory", m_qsDirCycler );
     m_poSettingsFile->setValue( "Test_Config/CyclerTestDirectory", m_qsDirCyclerConf );
     m_poSettingsFile->setValue( "Test_Config/CSSDirectory", m_qsDirCSS );
@@ -226,6 +229,11 @@ QString cTMPreferences::dirCyclerConf() const
 QString cTMPreferences::dirCSS() const
 {
     return m_qsDirCSS;
+}
+
+QString cTMPreferences::dirSatReleaseXml() const
+{
+    return m_qsDirSatReleaseXml;
 }
 
 QString cTMPreferences::regAIFVersion() const
@@ -378,6 +386,11 @@ void cTMPreferences::setDirCSS( const QString &p_qsDirCSS )
     m_qsDirCSS = p_qsDirCSS;
 }
 
+void cTMPreferences::setDirSatReleaseXml(const QString &p_qsDirSatReleaseXml)
+{
+    m_qsDirSatReleaseXml = p_qsDirSatReleaseXml;
+}
+
 void cTMPreferences::setRegAIFVersion( const QString &p_qsRegAIFVersion )
 {
     m_qsRegAIFVersion = p_qsRegAIFVersion;
@@ -398,19 +411,35 @@ void cTMPreferences::addTestcaseType(tcSystem p_tcSystem, QString p_qsTestcaseTy
     if( p_qsTestcaseType.length() < 0 )
         return;
 
+    QStringList qslComments = p_qsTestcaseType.split(',');
+
     if( p_tcSystem == TC_AIF )
     {
-        if( m_qslAIFTestCaseTypes.contains( p_qsTestcaseType.trimmed() ) )
-            return;
-
-        m_qslAIFTestCaseTypes << p_qsTestcaseType.trimmed();
+        for( int i=0; i<qslComments.count(); i++ )
+        {
+            if( !m_qslAIFTestCaseTypes.contains( qslComments.at(i).trimmed(),Qt::CaseInsensitive ) )
+            {
+                m_qslAIFTestCaseTypes.append( qslComments.at(i).trimmed() );
+            }
+        }
+        if( !m_qslAIFTestCaseTypes.contains( p_qsTestcaseType.trimmed(),Qt::CaseInsensitive ) )
+        {
+            m_qslAIFTestCaseTypes.append( p_qsTestcaseType.trimmed() );
+        }
     }
     else if( p_tcSystem == TC_CYCLER )
     {
-        if( m_qslCyclerTestCaseTypes.contains( p_qsTestcaseType.trimmed() ) )
-            return;
-
-        m_qslCyclerTestCaseTypes << p_qsTestcaseType.trimmed();
+        for( int i=0; i<qslComments.count(); i++ )
+        {
+            if( !m_qslCyclerTestCaseTypes.contains( qslComments.at(i).trimmed(),Qt::CaseInsensitive ) )
+            {
+                m_qslCyclerTestCaseTypes.append( qslComments.at(i).trimmed() );
+            }
+        }
+        if( !m_qslCyclerTestCaseTypes.contains( p_qsTestcaseType.trimmed(),Qt::CaseInsensitive ) )
+        {
+            m_qslCyclerTestCaseTypes.append( p_qsTestcaseType.trimmed() );
+        }
     }
 }
 

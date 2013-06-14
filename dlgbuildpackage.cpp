@@ -45,6 +45,8 @@ dlgBuildPackage::dlgBuildPackage(QWidget *parent) : QDialog(parent), ui(new Ui::
 
     ui->setupUi(this);
 
+    setWindowTitle( QString("Build SAT packages") );
+
     ui->cmbDrive->addItem( tr("<not selected>") );
     ui->cmbProgramName->addItem( tr("<not selected>") );
 
@@ -98,6 +100,13 @@ dlgBuildPackage::dlgBuildPackage(QWidget *parent) : QDialog(parent), ui(new Ui::
     ui->chkCSSEngRelease->setChecked( tgPrefs::instance().buildCSSEngVersion() );
     ui->ledCSSENGNumber->setEnabled( ui->chkCSSEngRelease->isChecked() );
     ui->ledCSSENGNumber->setText( tgPrefs::instance().buildCSSEngNumber() );
+
+    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    int         dlgWidth    = iniFile.value( "Dialogs/BuildPackage_width", 1014 ).toInt();
+    int         dlgHeight   = iniFile.value( "Dialogs/BuildPackage_height", 548 ).toInt();
+    QPoint      qpDlgSize   = QPoint( dlgWidth, dlgHeight );
+
+    resize( qpDlgSize.x(), qpDlgSize.y() );
 }
 //============================================================================================================
 //
@@ -106,6 +115,13 @@ dlgBuildPackage::dlgBuildPackage(QWidget *parent) : QDialog(parent), ui(new Ui::
 //============================================================================================================
 dlgBuildPackage::~dlgBuildPackage()
 {
+    QDir::setCurrent( m_qsCurrentPath );
+
+    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+
+    iniFile.setValue( "Dialogs/BuildPackage_width", width() );
+    iniFile.setValue( "Dialogs/BuildPackage_height", height() );
+
     if( m_qpBuildAIF != NULL )
     {
         m_qpBuildAIF->close();
@@ -126,8 +142,6 @@ dlgBuildPackage::~dlgBuildPackage()
         delete m_qpBuildCSS;
         m_qpBuildCSS = NULL;
     }
-
-    QDir::setCurrent( m_qsCurrentPath );
 
     delete ui;
 }
@@ -390,6 +404,9 @@ void dlgBuildPackage::on_pbStartCyclerBuild_clicked()
         if( ui->chkCyclerEngRelease->isChecked() )
             qsBuildCommand += qsENG;
 
+        if( ui->chkCyclerSilent->isChecked() )
+            qsBuildCommand += QString( " -no_usr_action" );
+
         m_qpBuildCycler->setProcessChannelMode( QProcess::MergedChannels );
         connect( m_qpBuildCycler, SIGNAL(readyReadStandardOutput()), this, SLOT(slot_CyclerStdoutUpdated()) );
         connect( m_qpBuildCycler, SIGNAL(finished(int)), this, SLOT(slot_CyclerProcessFinished()) );
@@ -471,15 +488,20 @@ void dlgBuildPackage::on_pbStartCSSBuild_clicked()
 
     m_qpBuildCSS = new QProcess();
 
-    if( QDir::setCurrent( QString("%1:\\sat\\CellStatusScenario").arg(ui->cmbCSSBuildDrive->currentText()) ) )
+    if( QDir::setCurrent( QString("%1:\\sat\\tools").arg(ui->cmbCSSBuildDrive->currentText()) ) )
     {
         QString     qsENG = (ui->chkCSSEngRelease->isChecked()?QString("_ENG%1").arg(ui->ledCSSENGNumber->text()):"");
-        QString     qsVersion = QString( "CSS_%1" ).arg( ui->ledCSSVersion->text() );
+        QString     qsBuildCommand = QString("tclsh80 cpcss.tcl CSS_%1").arg(ui->ledCSSVersion->text());
+//        QString     qsVersion = QString( "CSS_%1" ).arg( ui->ledCSSVersion->text() );
 
         if( ui->chkCSSEngRelease->isChecked() )
-            qsVersion.append( qsENG );
+            qsBuildCommand.append( qsENG );
 
-        QFile       qfVersionFile( "version.txt" );
+        if( ui->chkCSSSilent->isChecked() )
+            qsBuildCommand += QString( " -no_usr_action" );
+//            qsVersion.append( qsENG );
+
+/*        QFile       qfVersionFile( "version.txt" );
 
         if( qfVersionFile.exists() )
         {
@@ -503,6 +525,8 @@ void dlgBuildPackage::on_pbStartCSSBuild_clicked()
         qsBuildCommand.append( "ChkApp.tcl " );
         qsBuildCommand.append( "ChkGUI.tcl " );
         qsBuildCommand.append( "version.txt " );
+
+        m_qpBuildCSS->setProcessChannelMode( QProcess::MergedChannels );*/
 
         m_qpBuildCSS->setProcessChannelMode( QProcess::MergedChannels );
         connect( m_qpBuildCSS, SIGNAL(readyReadStandardOutput()), this, SLOT(slot_CSSStdoutUpdated()) );
@@ -1122,7 +1146,7 @@ void dlgBuildPackage::slot_CSSLabelUpdate()
 void dlgBuildPackage::_fillSATTree()
 {
     QDomDocument doc( "SATReleases" );
-    QFile file( "satreleases.xml" );
+    QFile file( QString("%1/satreleases.xml").arg(tgPrefs::instance().dirSatReleaseXml()) );
 
     if( !file.open(QIODevice::ReadOnly) )
         return;
@@ -1462,7 +1486,7 @@ void dlgBuildPackage::on_pbSATCancel_clicked()
 
 void dlgBuildPackage::_saveSATTree()
 {
-    QFile   fileSATReleases( "satreleases.xml" );
+    QFile   fileSATReleases( QString("%1/satreleases.xml").arg(tgPrefs::instance().dirSatReleaseXml()) );
 
     fileSATReleases.open( QIODevice::WriteOnly );
 
@@ -1545,6 +1569,8 @@ void dlgBuildPackage::on_pbBuildSatPackage_clicked()
         ui->chkPublishCSSAuto->setChecked( ui->chkPublish->isChecked() );
 
         ui->chkAIFSilent->setChecked( ui->chkBuildSilent->isChecked() );
+        ui->chkCyclerSilent->setChecked( ui->chkBuildSilent->isChecked() );
+        ui->chkCSSSilent->setChecked( ui->chkBuildSilent->isChecked() );
 
         on_pbStartAIFBuild_clicked();
         on_pbStartCyclerBuild_clicked();

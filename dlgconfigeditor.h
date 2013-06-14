@@ -7,6 +7,7 @@
 #include <QStandardItemModel>
 #include <QListWidgetItem>
 #include <QTextStream>
+#include <QTreeWidgetItem>
 
 #include "dlgprogress.h"
 #include "tmpreferences.h"
@@ -30,10 +31,9 @@ private slots:
     void on_listTestTypes_itemClicked(QListWidgetItem *item);
     void on_pbExit_clicked();
     void on_pbSave_clicked();
-
     void on_pbSelectAll_clicked();
-
     void on_pbDeselectAll_clicked();
+    void on_treeTestElements_itemClicked(QTreeWidgetItem *item, int column);
 
 private:
     Ui::dlgConfigEditor         *ui;
@@ -44,10 +44,13 @@ private:
 
     QString                      m_qsDir;
     QString                      m_qsDirConf;
+    QString                      m_qsDirConfOrig;
     QString                      m_qsFileName;
     QVector<QStringList>         m_vTestCases;
     bool                         m_bSilentMode;
     bool                         m_bOnlyTP;
+
+    QStringList                  m_qslSelectedComments;
 
     void                        _readConfigFile();
     void                        _fillListView();
@@ -56,6 +59,7 @@ private:
     void                        _saveConfigSettings();
     void                        _readConfigXml( QString p_qsFileName );
     QString                     _getCyclerVersionFromPath( const QString &p_qsPath ) const;
+    void                        _fillSelectedComments( QString &p_qsComment );
 };
 
 #endif // DLGCONFIGEDITOR_H

@@ -281,7 +281,7 @@
              <number>3</number>
             </property>
             <attribute name="headerVisible">
-             <bool>true</bool>
+             <bool>false</bool>
             </attribute>
             <attribute name="headerCascadingSectionResizes">
              <bool>true</bool>
@@ -1078,6 +1078,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QCheckBox" name="chkCyclerSilent">
+           <property name="text">
+            <string>Build silent</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <spacer name="horizontalSpacer_6">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -1359,6 +1366,13 @@
           <widget class="QCheckBox" name="chkPublishCSSAuto">
            <property name="text">
             <string>Publish automatically</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="chkCSSSilent">
+           <property name="text">
+            <string>Build silent</string>
            </property>
           </widget>
          </item>
