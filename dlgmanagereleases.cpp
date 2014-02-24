@@ -70,7 +70,7 @@ dlgManageReleases::dlgManageReleases(QWidget *parent) : QDialog(parent), ui(new 
     _fillListCyclerReleases();
     _fillListCSSReleases();
 
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
     int         dlgWidth    = iniFile.value( "Dialogs/ManageReleases_width", 702 ).toInt();
     int         dlgHeight   = iniFile.value( "Dialogs/ManageReleases_height", 634 ).toInt();
     QPoint      qpDlgSize   = QPoint( dlgWidth, dlgHeight );
@@ -84,7 +84,7 @@ dlgManageReleases::dlgManageReleases(QWidget *parent) : QDialog(parent), ui(new 
 //============================================================================================================
 dlgManageReleases::~dlgManageReleases()
 {
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
 
     iniFile.setValue( "Dialogs/ManageReleases_width", width() );
     iniFile.setValue( "Dialogs/ManageReleases_height", height() );
@@ -133,11 +133,6 @@ void dlgManageReleases::on_pbAIFInstall_clicked()
                                tr("Are you sure you want to install the following release:\n\n%1").arg(qsRelease),
                                QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
     {
-        QFile   qfFile;
-
-        qfFile.setFileName( qsRelease );
-        qfFile.copy( QString("%1/CurrentAIFRelease.msi").arg(QDir::currentPath()) );
-
         QProcess *qpAIFInstall = new QProcess(this);
 
         if( !qpAIFInstall->startDetached( QString("msiexec.exe /i \"%1\"").arg(qsRelease) ) )
@@ -503,7 +498,7 @@ void dlgManageReleases::_loadRegistrySettings()
 
 void dlgManageReleases::_loadBackupSettings()
 {
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
 
     m_qsRegEngPC_IP = iniFile.value( "AIF/engPC_IP", tr("<key not found>") ).toString();
     m_qsRegDL_IP = iniFile.value( "AIF/DL_IP", tr("<key not found>") ).toString();
@@ -524,7 +519,7 @@ void dlgManageReleases::_loadBackupSettings()
 
 void dlgManageReleases::_backupRegistrySettings()
 {
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
 
     iniFile.setValue( "AIF/Version", m_qsRegAIFVersion );
     iniFile.setValue( "AIF/InnovaPrg", m_qsRegInnovaPrg );

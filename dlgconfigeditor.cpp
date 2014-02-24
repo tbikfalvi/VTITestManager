@@ -102,7 +102,7 @@ dlgConfigEditor::dlgConfigEditor(QWidget *parent, QString p_qsSystem, QString p_
     ui->ledITUVersion->setText( m_qsRegITUVersion );
     ui->ledTableType->setText( m_qsRegTableType );
 
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
     int         dlgWidth    = iniFile.value( "Dialogs/ConfigEditor_width", 724 ).toInt();
     int         dlgHeight   = iniFile.value( "Dialogs/ConfigEditor_height", 705 ).toInt();
     QPoint      qpDlgSize   = QPoint( dlgWidth, dlgHeight );
@@ -118,7 +118,7 @@ dlgConfigEditor::~dlgConfigEditor()
 {
     cTracer tracer("~dlgConfigEditor");
 
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
 
     iniFile.setValue( "Dialogs/ConfigEditor_width", width() );
     iniFile.setValue( "Dialogs/ConfigEditor_height", height() );

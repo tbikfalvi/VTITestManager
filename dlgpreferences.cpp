@@ -47,7 +47,7 @@ dlgPreferences::dlgPreferences(QWidget *parent) : QDialog(parent), ui(new Ui::dl
 
     bSettingsChanged = false;
 
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
     int         dlgWidth    = iniFile.value( "Dialogs/Preferences_width", 526 ).toInt();
     int         dlgHeight   = iniFile.value( "Dialogs/Preferences_height", 467 ).toInt();
     QPoint      qpDlgSize   = QPoint( dlgWidth, dlgHeight );
@@ -57,7 +57,7 @@ dlgPreferences::dlgPreferences(QWidget *parent) : QDialog(parent), ui(new Ui::dl
 
 dlgPreferences::~dlgPreferences()
 {
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
 
     iniFile.setValue( "Dialogs/ProcessCommand_width", width() );
     iniFile.setValue( "Dialogs/ProcessCommand_height", height() );
@@ -170,7 +170,7 @@ void dlgPreferences::_loadSettings()
     QString qsDirCycler         = QString("C:/cycler_liberty");
     QString qsDirConfCycler     = QString("%1/<CYCLER_VERSION>/test/engine").arg(qsDirCycler);
 
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
 
     ui->ledDirAIF->setText( iniFile.value( "Test_Config/AIFDirectory", qsDirAIF ).toString() );
     ui->ledDirAIF->setToolTip( ui->ledDirAIF->text() );

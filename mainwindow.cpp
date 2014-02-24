@@ -12,6 +12,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QProcess>
+#include <QDateTime>
 
 //============================================================================================================
 
@@ -41,7 +42,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     tgPrefs::instance().load();
 
-    setWindowTitle( QString("VTI Test Manager - Version: %1").arg(tgPrefs::instance().qsAppVersion()) );
+    setWindowTitle( QString("VTI Application Manager - Version: %1").arg(tgPrefs::instance().qsAppVersion()) );
 
     while( tgPrefs::instance().actionNeeded() )
     {
@@ -62,6 +63,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     }
 
     ui->action_BuildVTIPackage->setEnabled( tgPrefs::instance().isRunningOnDevelopmentPC() );
+
+    m_lblStatusRight.setAlignment( Qt::AlignHCenter );
+    m_lblStatusRight.setStyleSheet( "QLabel {font: bold; font-size:10px;}" );
+
+    ui->statusBar->addPermanentWidget( &m_lblStatusLeft, 2 );
+    ui->statusBar->addPermanentWidget( &m_lblStatusRight, 1 );
+
+    m_nTimer = startTimer( 1000 );
 }
 //============================================================================================================
 // MainWindow destructor
@@ -73,22 +82,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 //============================================================================================================
+// timerEvent
+//------------------------------------------------------------------------------------------------------------
+// Event occures regulary as defined with startTimer
+//============================================================================================================
+void MainWindow::timerEvent(QTimerEvent *)
+{
+    m_lblStatusRight.setText( QDateTime::currentDateTime().toString( "yyyy-MM-dd hh:mm:ss" ) );
+}
+//============================================================================================================
 // closeEvent
 //------------------------------------------------------------------------------------------------------------
 // Event occures when main window of application is begin to close
 //============================================================================================================
 void MainWindow::closeEvent( QCloseEvent *p_poEvent )
 {
-    if( QMessageBox::question( this, tr("Question"),
+    tgPrefs::instance().setMainwindowLeft( x() );
+    tgPrefs::instance().setMainwindowTop( y() );
+    tgPrefs::instance().save();
+    /*if( QMessageBox::question( this, tr("Question"),
                                tr("Are you sure you want to close the application?"),
                                QMessageBox::Yes | QMessageBox::No, QMessageBox::No ) == QMessageBox::Yes )
-    {
+    {*/
         p_poEvent->accept();
-    }
+    /*}
     else
     {
         p_poEvent->ignore();
-    }
+    }*/
 }
 //============================================================================================================
 // on_action_ExitApplication_triggered
@@ -164,9 +185,22 @@ void MainWindow::on_action_Cycler_TestConfiguration_triggered()
 //============================================================================================================
 void MainWindow::on_action_ManageReleases_triggered()
 {
-    dlgManageReleases   obDlgManageReleases( this );
+    QProcess *qpAIFInstall = new QProcess(this);
 
-    obDlgManageReleases.exec();
+    if( !qpAIFInstall->startDetached( QString("VTISATInstaller.exe") ) )
+    {
+        QMessageBox::warning( this, tr("Warning"),
+                              tr("Error occured when starting process:\n\nmsiexec.exe /i %1\n\nError code: %2\n"
+                                 "0 > The process failed to start.\n"
+                                 "1 > The process crashed some time after starting successfully.\n"
+                                 "2 > The last waitFor...() function timed out.\n"
+                                 "4 > An error occurred when attempting to write to the process.\n"
+                                 "3 > An error occurred when attempting to read from the process.\n"
+                                 "5 > An unknown error occurred.").arg("qsRelease").arg(qpAIFInstall->error()) );
+    }
+
+//    dlgManageReleases   obDlgManageReleases( this );
+//    obDlgManageReleases.exec();
 }
 //============================================================================================================
 //

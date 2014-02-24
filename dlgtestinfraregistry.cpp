@@ -321,7 +321,7 @@ void dlgTestinfraRegistry::on_pbCheckDifference_clicked()
 //============================================================================================================
 void dlgTestinfraRegistry::on_pbSaveToIni_clicked()
 {
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
 
     iniFile.setValue( "AIF/Version", ui->ledAIFVersion->text() );
     iniFile.setValue( "AIF/InnovaPrg", ui->ledInnovaProgram->text() );
@@ -436,7 +436,7 @@ void dlgTestinfraRegistry::_loadRegistrySettings()
 //============================================================================================================
 void dlgTestinfraRegistry::_loadBackupSettings()
 {
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
 
     m_qsIniAIFVersion = iniFile.value( "AIF/Version", tr("<key not found>") ).toString();
     m_qsIniInnovaPrg = iniFile.value( "AIF/InnovaPrg", tr("<key not found>") ).toString();

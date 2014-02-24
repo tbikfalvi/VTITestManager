@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT          += core gui xml
-TARGET       = VTITestManager
+TARGET       = VTIAppManager
 TEMPLATE     = app
 INCLUDEPATH += framework
 

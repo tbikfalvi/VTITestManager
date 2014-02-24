@@ -17,19 +17,18 @@ int main(int argc, char *argv[])
     QApplication obApp(argc, argv);
 
     tgLogger::instance().registerWriter( new cGUIWriter( cSeverity::ERROR ) );
-    tgLogger::instance().registerWriter( new cFileWriter( cSeverity::DEBUG,
-                                                          "vtitestmanager.log",
-                                                          cFileWriter::APPEND ) );
+    tgLogger::instance().registerWriter( new cFileWriter( cSeverity::DEBUG, "vtiappmanager.log",cFileWriter::APPEND ) );
 
     try
     {
         MainWindow mainWindow;
 
-        mainWindow.setGeometry( QStyle::alignedRect( Qt::LeftToRight,
-                                                     Qt::AlignCenter,
-                                                     mainWindow.size(),
-                                                     obApp.desktop()->availableGeometry() ));
-        tgPrefs::instance().setScreenSize( obApp.desktop()->availableGeometry() );
+//        mainWindow.setGeometry( QStyle::alignedRect( Qt::LeftToRight,
+//                                                     Qt::AlignCenter,
+//                                                     mainWindow.size(),
+//                                                     obApp.desktop()->availableGeometry() ));
+//        tgPrefs::instance().setScreenSize( obApp.desktop()->availableGeometry() );
+        mainWindow.move( tgPrefs::instance().mainwindowLeft(), tgPrefs::instance().mainwindowTop() );
         mainWindow.show();
 
         inRetVal = obApp.exec();

@@ -55,7 +55,7 @@ dlgProcessCmd::dlgProcessCmd(QWidget *parent) : QDialog(parent), ui(new Ui::dlgP
 
     ui->cmbMessage->addItem( "" );
 
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
     int         dlgWidth    = iniFile.value( "Dialogs/ProcessCommand_width", 669 ).toInt();
     int         dlgHeight   = iniFile.value( "Dialogs/ProcessCommand_height", 563 ).toInt();
     QPoint      qpDlgSize   = QPoint( dlgWidth, dlgHeight );
@@ -69,7 +69,7 @@ dlgProcessCmd::dlgProcessCmd(QWidget *parent) : QDialog(parent), ui(new Ui::dlgP
 //============================================================================================================
 dlgProcessCmd::~dlgProcessCmd()
 {
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
 
     iniFile.setValue( "Dialogs/ProcessCommand_width", width() );
     iniFile.setValue( "Dialogs/ProcessCommand_height", height() );

@@ -7,7 +7,7 @@ cTMPreferences::cTMPreferences() : cPreferences()
 {
     cTracer tracer( "cTMPreferences::cTMPreferences" );
 
-    setAppName( "VTITestManager" );
+    setAppName( "VTIAppManager" );
 
     m_bActionNeeded             = false;
 
@@ -39,6 +39,8 @@ cTMPreferences::cTMPreferences() : cPreferences()
     m_qsBuildCSSEngNumber       = QString("test");
     m_qsProcessDrive            = QString("C");
     m_qsProcessPath             = QString("\\");
+    m_nMainWindowLeft           = 0;
+    m_nMainWindowTop            = 0;
 }
 
 cTMPreferences::~cTMPreferences()
@@ -61,11 +63,11 @@ void cTMPreferences::readSettings( QSettings *m_poSettingsFile )
     m_qsDirCSS = m_poSettingsFile->value( "Test_Config/CSSDirectory", m_qsDirCSS ).toString();
 
     m_qsRegAIFVersion = regHKLM_Testinfra.value( "AIF/Version", QObject::tr("_not_defined_") ).toString();
-    m_qsRegITUAddress = regHKLM_Testinfra.value( "Cycler/TempData/infoITU", QObject::tr("_not_defined_") ).toString();
+    m_qsRegITUAddress = regHKLM_Testinfra.value( "Cycler/itu ip", QObject::tr("_not_defined_") ).toString();
 
-    QSettings   regHKLM_TestManager( "HKEY_LOCAL_MACHINE\\SOFTWARE\\VTI Test Manager", QSettings::NativeFormat );
+    QSettings   regHKLM_AppManager( "HKEY_LOCAL_MACHINE\\SOFTWARE\\VTI Test Manager", QSettings::NativeFormat );
 
-    QString qsTemp = regHKLM_TestManager.value( "RunningOnDevelopmentPc", QObject::tr("_not_defined_") ).toString();
+    QString qsTemp = regHKLM_AppManager.value( "RunningOnDevelopmentPc", QObject::tr("_not_defined_") ).toString();
 
     if( qsTemp.compare(QObject::tr("_not_defined_")) == 0 )
     {
@@ -74,8 +76,11 @@ void cTMPreferences::readSettings( QSettings *m_poSettingsFile )
     }
     else
     {
-        m_bIsRunningOnDevelopmentPC = regHKLM_TestManager.value( "RunningOnDevelopmentPc", false ).toBool();
+        m_bIsRunningOnDevelopmentPC = regHKLM_AppManager.value( "RunningOnDevelopmentPc", false ).toBool();
     }
+
+    setMainwindowLeft( regHKLM_AppManager.value("MainWindowLeft", 0).toInt() );
+    setMainwindowTop( regHKLM_AppManager.value("MainWindowTop", 0).toInt() );
 
     m_qslAIFTestCaseTypes = QStringList() << m_poSettingsFile->value( "AIF/TestcaseTypes", "" ).toString().split(QChar('#'));
     if( m_qslAIFTestCaseTypes.count() == 1 && m_qslAIFTestCaseTypes.at(0).length() < 1 )
@@ -145,9 +150,12 @@ void cTMPreferences::writeSettings( QSettings *m_poSettingsFile ) const
     m_poSettingsFile->setValue( "BuildCSS/ENGRelease", m_bBuildCSSEngVersion );
     m_poSettingsFile->setValue( "BuildCSS/ENGNumber", m_qsBuildCSSEngNumber );
 
-    QSettings   regHKLM_TestManager( "HKEY_LOCAL_MACHINE\\SOFTWARE\\VTI Test Manager", QSettings::NativeFormat );
+    QSettings   regHKLM_AppManager( "HKEY_LOCAL_MACHINE\\SOFTWARE\\VTI Test Manager", QSettings::NativeFormat );
 
-    regHKLM_TestManager.setValue( "RunningOnDevelopmentPc", m_bIsRunningOnDevelopmentPC );
+    regHKLM_AppManager.setValue( "RunningOnDevelopmentPc", m_bIsRunningOnDevelopmentPC );
+
+    regHKLM_AppManager.setValue( "MainWindowLeft", mainwindowLeft() );
+    regHKLM_AppManager.setValue( "MainWindowTop", mainwindowTop() );
 
     m_poSettingsFile->setValue( "AIF/TestcaseTypes", m_qslAIFTestCaseTypes.join(QChar('#')) );
     m_poSettingsFile->setValue( "Cycler/TestcaseTypes", m_qslCyclerTestCaseTypes.join(QChar('#')) );
@@ -590,4 +598,24 @@ QRect cTMPreferences::screenSize() const
 void cTMPreferences::setScreenSize(const QRect &p_qrScreenSize)
 {
     m_qrScreenSize = p_qrScreenSize;
+}
+
+int cTMPreferences::mainwindowLeft() const
+{
+    return m_nMainWindowLeft;
+}
+
+void cTMPreferences::setMainwindowLeft(const int p_nLeft)
+{
+    m_nMainWindowLeft = p_nLeft;
+}
+
+int cTMPreferences::mainwindowTop() const
+{
+    return m_nMainWindowTop;
+}
+
+void cTMPreferences::setMainwindowTop(const int p_nTop)
+{
+    m_nMainWindowTop = p_nTop;
 }

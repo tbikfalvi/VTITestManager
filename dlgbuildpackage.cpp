@@ -32,16 +32,14 @@ dlgBuildPackage::dlgBuildPackage(QWidget *parent) : QDialog(parent), ui(new Ui::
 {
     m_qsCurrentPath = QDir::currentPath();
 
-    m_qpBuildAIF = NULL;
-    m_bProcessAIFHalted = false;
-
-    m_qpBuildCycler = NULL;
-    m_bProcessCyclerHalted = false;
-
-    m_qpBuildCSS = NULL;
-    m_bProcessCSSHalted = false;
-
-    m_bModifySATRelease = false;
+    m_qpBuildAIF                = NULL;
+    m_bProcessAIFHalted         = false;
+    m_qpBuildCycler             = NULL;
+    m_bProcessCyclerHalted      = false;
+    m_qpBuildCSS                = NULL;
+    m_bProcessCSSHalted         = false;
+    m_bModifySATRelease         = false;
+    m_bIsReleaseCanBePublished  = true;
 
     ui->setupUi(this);
 
@@ -101,10 +99,18 @@ dlgBuildPackage::dlgBuildPackage(QWidget *parent) : QDialog(parent), ui(new Ui::
     ui->ledCSSENGNumber->setEnabled( ui->chkCSSEngRelease->isChecked() );
     ui->ledCSSENGNumber->setText( tgPrefs::instance().buildCSSEngNumber() );
 
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
     int         dlgWidth    = iniFile.value( "Dialogs/BuildPackage_width", 1014 ).toInt();
     int         dlgHeight   = iniFile.value( "Dialogs/BuildPackage_height", 548 ).toInt();
     QPoint      qpDlgSize   = QPoint( dlgWidth, dlgHeight );
+
+    if( tgPrefs::instance().dirRemoteReleases().length() < 1 )
+    {
+        QMessageBox::warning( this, tr("Warning"),
+                              tr("The remote directory is not set.\n"
+                                 "Release publish is not available.") );
+        m_bIsReleaseCanBePublished = false;
+    }
 
     resize( qpDlgSize.x(), qpDlgSize.y() );
 }
@@ -117,7 +123,7 @@ dlgBuildPackage::~dlgBuildPackage()
 {
     QDir::setCurrent( m_qsCurrentPath );
 
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
 
     iniFile.setValue( "Dialogs/BuildPackage_width", width() );
     iniFile.setValue( "Dialogs/BuildPackage_height", height() );
@@ -620,11 +626,14 @@ void dlgBuildPackage::slot_AIFProcessFinished()
     if( !m_bProcessAIFHalted && ui->ptAIFStdOut->toPlainText().contains( "Test Infra package build finished" ) )
     {
         ui->pbCopyAIFRelease->setEnabled( true );
-        ui->pbPublishAIFRelease->setEnabled( true );
-
-        if( ui->chkPublishAIFAuto->isChecked() )
+        if( m_bIsReleaseCanBePublished )
         {
-            on_pbPublishAIFRelease_clicked();
+            ui->pbPublishAIFRelease->setEnabled( true );
+
+            if( ui->chkPublishAIFAuto->isChecked() )
+            {
+                on_pbPublishAIFRelease_clicked();
+            }
         }
     }
 
@@ -658,11 +667,14 @@ void dlgBuildPackage::slot_CyclerProcessFinished()
     if( !m_bProcessCyclerHalted && ui->ptCyclerStdOut->toPlainText().contains( "Zip file created:" ) )
     {
         ui->pbCopyCyclerRelease->setEnabled( true );
-        ui->pbPublishCylerRelease->setEnabled( true );
-
-        if( ui->chkPublishCyclerAuto->isChecked() )
+        if( m_bIsReleaseCanBePublished )
         {
-            on_pbPublishCylerRelease_clicked();
+            ui->pbPublishCylerRelease->setEnabled( true );
+
+            if( ui->chkPublishCyclerAuto->isChecked() )
+            {
+                on_pbPublishCylerRelease_clicked();
+            }
         }
     }
 
@@ -694,11 +706,14 @@ void dlgBuildPackage::slot_CSSProcessFinished()
                                  "----------------------------------------------------------\n").arg(qsFinishMessage) );
 
     ui->pbCopyCSSRelease->setEnabled( true );
-    ui->pbPublishCSSRelease->setEnabled( true );
-
-    if( ui->chkPublishCSSAuto->isChecked() )
+    if( m_bIsReleaseCanBePublished )
     {
-        on_pbPublishCSSRelease_clicked();
+        ui->pbPublishCSSRelease->setEnabled( true );
+
+        if( ui->chkPublishCSSAuto->isChecked() )
+        {
+            on_pbPublishCSSRelease_clicked();
+        }
     }
 
     m_bProcessCSSHalted = false;
@@ -749,6 +764,7 @@ void dlgBuildPackage::_enableCyclerBuildSettings(bool p_bEnabled)
     ui->pbStartCyclerBuild->setEnabled( p_bEnabled );
     ui->chkSaveCyclerBuildSettings->setEnabled( p_bEnabled );
     ui->chkPublishCyclerAuto->setEnabled( p_bEnabled );
+    ui->chkCyclerSilent->setEnabled( p_bEnabled );
 
     ui->pbCyclerYes->setEnabled( !p_bEnabled );
     ui->pbCyclerNo->setEnabled( !p_bEnabled );
@@ -770,6 +786,7 @@ void dlgBuildPackage::_enableCSSBuildSettings(bool p_bEnabled)
     ui->pbStartCSSBuild->setEnabled( p_bEnabled );
     ui->chkSaveCSSBuildSettings->setEnabled( p_bEnabled );
     ui->chkPublishCSSAuto->setEnabled( p_bEnabled );
+    ui->chkCSSSilent->setEnabled( p_bEnabled );
 
     ui->pbCSSYes->setEnabled( !p_bEnabled );
     ui->pbCSSNo->setEnabled( !p_bEnabled );
@@ -1032,8 +1049,8 @@ void dlgBuildPackage::on_pbPublishCSSRelease_clicked()
 
     qsDir.replace( QString("/"), QString("\\") );
     _appendCSSStdOut( QString("\nPublish CSS package '%1'\n"
-                                 "    from '%2'\n"
-                                 "    to '%3'\n").arg(qsFileName).arg(qsDir).arg(qsDestPath) );
+                              "    from '%2'\n"
+                              "    to '%3'\n").arg(qsFileName).arg(qsDir).arg(qsDestPath) );
 
     QDir    qdDest(qsDestPath);
 
@@ -1355,11 +1372,13 @@ void dlgBuildPackage::on_treeSATReleases_currentItemChanged(QTreeWidgetItem *cur
     {
         ui->pbSATModify->setEnabled( true );
         ui->pbSATDelete->setEnabled( true );
+        ui->pbSATNewRelease->setEnabled( true );
     }
     else
     {
         ui->pbSATModify->setEnabled( false );
         ui->pbSATDelete->setEnabled( false );
+        ui->pbSATNewRelease->setEnabled( false );
     }
 }
 

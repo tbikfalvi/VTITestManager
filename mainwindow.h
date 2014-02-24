@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QLabel>
 
 namespace Ui {
     class MainWindow;
@@ -15,6 +16,9 @@ public:
 
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+protected:
+    void timerEvent( QTimerEvent *p_poEvent );
 
 private slots:
 
@@ -32,7 +36,11 @@ private slots:
 
 private:
 
-    Ui::MainWindow *ui;
+    Ui::MainWindow          *ui;
+    QLabel                   m_lblStatusLeft;
+    QLabel                   m_lblStatusRight;
+
+    int                      m_nTimer;
 };
 
 #endif // MAINWINDOW_H

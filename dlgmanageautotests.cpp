@@ -45,7 +45,7 @@ dlgManageAutoTests::dlgManageAutoTests(QWidget *parent, QString p_qsSystem, QStr
 
     m_dlgWarningBox = new cDlgWarningBox( this );
 
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
     int         dlgWidth    = iniFile.value( "Dialogs/ManageAutotest_width", 580 ).toInt();
     int         dlgHeight   = iniFile.value( "Dialogs/ManageAutotest_height", 240 ).toInt();
     QPoint      qpDlgSize   = QPoint( dlgWidth, dlgHeight );
@@ -59,7 +59,7 @@ dlgManageAutoTests::dlgManageAutoTests(QWidget *parent, QString p_qsSystem, QStr
 //============================================================================================================
 dlgManageAutoTests::~dlgManageAutoTests()
 {
-    QSettings   iniFile( "VTITestManager.ini", QSettings::IniFormat );
+    QSettings   iniFile( "VTIAppManager.ini", QSettings::IniFormat );
 
     iniFile.setValue( "Dialogs/ManageReleases_width", width() );
     iniFile.setValue( "Dialogs/ManageReleases_height", height() );

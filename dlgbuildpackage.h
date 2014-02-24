@@ -51,25 +51,15 @@ private slots:
     void on_pbPublishAIFRelease_clicked();
     void on_pbPublishCylerRelease_clicked();
     void on_pbPublishCSSRelease_clicked();
-
     void on_treeSATReleases_doubleClicked(const QModelIndex &index);
-
     void on_pbSATNewProgram_clicked();
-
     void on_pbSATNewRelease_clicked();
-
     void on_pbSATModify_clicked();
-
     void on_pbSATDelete_clicked();
-
     void on_treeSATReleases_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
-
     void on_pbSATSave_clicked();
-
     void on_pbSATCancel_clicked();
-
     void on_pbCopySettings_clicked();
-
     void on_pbBuildSatPackage_clicked();
 
 private:
@@ -84,6 +74,7 @@ private:
     bool                 m_bProcessCSSHalted;
     bool                 m_bModifySATRelease;
     bool                 m_bBuildCanStart;
+    bool                 m_bIsReleaseCanBePublished;
 
     void                _fillSATTree();
     void                _saveSATTree();
